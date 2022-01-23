@@ -1,12 +1,4 @@
-//put in addr and abi
-
-//https://www.dappuniversity.com/articles/ethereum-dapp-react-tutorial
-
-// export const molochContractAddress = "0x4C1E90F26303AfD1c36DAd5eC63e94990C2139dd" //ganache, will need to load this programatically when summoner called.
-
-
-
-export const molochContractABI = [
+export const molochABI = [
   {
     "constant": true,
     "inputs": [

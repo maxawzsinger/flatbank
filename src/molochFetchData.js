@@ -13,7 +13,7 @@ const summoningTime = await daoContract.methods.summoningTime().call();
 data.summoningTime = summoningTime;
 const originalSummoningTime = await daoContract.methods.originalSummoningTime().call();
 data.originalSummoningTime = originalSummoningTime;
-const currentPeriod = daoContract.methods.getCurrentPeriod().call; //attach to prop obj for render by component
+const currentPeriod = await daoContract.methods.getCurrentPeriod().call(); //attach to prop obj for render by component
 
 //get member information
 const memberCount = await daoContract.methods.getMemberCount().call();

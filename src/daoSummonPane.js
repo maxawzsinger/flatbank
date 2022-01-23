@@ -21,41 +21,6 @@ function DaoSummonPane(props) { //pass in summonerContract and web3js obj and ac
 //ADD TO FORM BUTTONS FOR adding dao members and corresponding membership share, one by one for below function to use
 
 
-  const handleSummonDaoSubmit = (event) => {
-
-      event.preventDefault();
-      if (addresses.length>0) {
-      alert("creating contract")
-      props.summonerContract.methods.summonMoloch(addresses,[otherConfig.tokenAddress],17280, 35, 35, 1, 3, 1, shares).send(
-        {from: props.account}
-      ).on('transactionHash', function(hash){
-          console.log(hash);
-      })
-      .on('receipt', function(receipt){
-          console.log(receipt);
-      })
-      .on('confirmation', function(confirmationNumber, receipt){
-          console.log(confirmationNumber);
-      })
-      .on('error', function(error, receipt) {
-          console.log(error);
-      });
-    } else {
-      alert("no members added");
-    }
-  }
-
-
-  //summoners (array)
-  //approved tokens (array)
-  // uint256 public periodDuration; // default = 17280 = 4.8 hours in seconds (5 periods per day)
-  // uint256 public votingPeriodLength; // default = 35 periods (7 days)
-  // uint256 public gracePeriodLength; // default = 35 periods (7 days)
-  // uint256 public proposalDeposit; // default = 10 ETH (~$1,000 worth of ETH at contract deployment)
-  // uint256 public dilutionBound; // default = 3 - maximum multiplier a YES voter will be obligated to pay in case of mass ragequit
-  // uint256 public processingReward; // default = 0.1 - amount of ETH to give to whoever processes a proposal
-  //summoner shares (array, order corresponding to each summoner)
-
   function handleAddSummoner(){
     if (!addresses.includes(enteredSummonerAddress)) {
     setAddresses([...addresses,enteredSummonerAddress]);
@@ -109,7 +74,7 @@ function DaoSummonPane(props) { //pass in summonerContract and web3js obj and ac
     <button onClick={() => {setAddresses([]);setShares([]);setEnteredSummonerAddress([]);setEnteredSummonerShare([])}}>CLEAR ALL</button>
 
     </p>
-    <button onClick={handleSummonDaoSubmit}>Summon dao</button>
+    <button onClick={(e) => {e.preventDefault();props.molochMessenger.summon(addresses,shares);}}>Summon dao</button>
 
 
   </div>

@@ -1,15 +1,10 @@
-import {useState, useEffect} from 'react';
-import {molochContractABI} from './molochContractConfig';
-import getData from './molochFetchData.js';
-import otherConfig from './otherConfig';
+import {useState} from 'react';
 import Proposal from './proposal';
 
 
 
 function DaoInteractionPane(props) {
 
-
-  const [listOfDaos, setListOfDaos] = useState([]); //hold list of all daos of which the user is a member
   const [contractGetterFunctions, setContractGetterFunctions] = useState([]);
   const [availableContractFunctions, setAvailableContractFunctions] = useState([]);
   const [currentDaoContract, setCurrentDaoContract] = useState({});
@@ -34,93 +29,13 @@ function DaoInteractionPane(props) {
 
 
 /////////////////////ONLOAD
-  useEffect(() => {
 
 
-  async function load() {
-
-    if (props.summonerContract.methods) { //if not yet init, do nothing. this avoids an err message. but will auto run again when properly init
-    const totalNumberOfDaos = await props.summonerContract.methods.numberOfDaos().call();
-
-    var usersDaos = [];
-    for (let i = 0; i<totalNumberOfDaos; i++) {
-      const daoAddress = await props.summonerContract.methods.addressLUT(i).call();
-      const daoInstance = new props.web3js.eth.Contract(molochContractABI, daoAddress);
-      const memberInDao = await daoInstance.methods.checkMemberInDao(props.account);
-      if (memberInDao) {
-        usersDaos.push(daoAddress);
-      }
-    }
-
-    //then for each dao address, check if daoAddress.members[user.addresss] exists, if so build array for this.
-
-    setListOfDaos(usersDaos);
-    console.log("daos of which user is a member: " + usersDaos);
-
-    var getterFunctions = [];
-    for (let i = 0;i<molochContractABI.length;i++) {
-      if (molochContractABI[i].uiLocation === "hidden" && molochContractABI[i].type == "function") {
-        getterFunctions.push(molochContractABI[i].name);
-      }
-    }
-    setContractGetterFunctions(getterFunctions);
-
-    console.log(getterFunctions);
-    var allFunctions = [];
-
-    for (let i = 0;i<34;i++) {
-      allFunctions.push(`var ${getterFunctions[i]}Data = await daoContract.methods.${getterFunctions[i]}().call;data.push(${getterFunctions[i]}Data)`);
-    }
-
-
-
-    var allAvailableContractFunctions =[];
-
-    for (let i = 0;i<molochContractABI.length;i++) {
-      if (molochContractABI[i].uiLocation !== "hidden" && molochContractABI[i].type == "function" && molochContractABI[i].uiLocation !== "lockedOff") {
-        allAvailableContractFunctions.push(molochContractABI[i].name);
-      }
-    }
-    setAvailableContractFunctions(allAvailableContractFunctions);
-  }
-}
-
-  load();
-}, [props.summonerContract]) //when props.summmonerContract is properly init, this function will run again.
-
-
-function handleFunctionSelect(functionName) {
-  for (let i = 0; i<molochContractABI.length;i++) {
-    if (molochContractABI[i].name == functionName) {
-      setSelectedContractFunction(molochContractABI[i]);
-      console.log(functionName);
-    }
-  }
-}
-
-function makeFunctionButton(functionName) {
-    return (
-        <button
-            onClick={() => handleFunctionSelect(functionName)}>
-            {functionName}
-        </button>
-    );
-}
-
-// <ul>
-// {availableContractFunctions.map(element => <li key = {element}> {makeFunctionButton(element)}</li>)}
-// </ul>
-
-function handleDaoSelect(daoAddress) {
-  const daoInstance = new props.web3js.eth.Contract(molochContractABI, daoAddress);
-  setCurrentDaoAddress(daoAddress);
-  setCurrentDaoContract(daoInstance);
-}
 
 function makeDaoButton(daoAddress) {
     return (
         <button
-            onClick={() => handleDaoSelect(daoAddress)}>
+            onClick={() => props.changeDao(daoAddress)}>
             {daoAddress}
         </button>
     );
@@ -128,135 +43,24 @@ function makeDaoButton(daoAddress) {
 
 
 
-
-
-const handleWithdraw = (event) => {
-    event.preventDefault();
-
-    alert("withdrawing")
-    currentDaoContract.methods.withdrawBalance(otherConfig.tokenAddress,amountToBeWithdrawn).send(
-      {from: props.account}
-    ).on('transactionHash', function(hash){
-        console.log(hash);
-    })
-    .on('receipt', function(receipt){
-        console.log(receipt);
-    })
-    .on('confirmation', function(confirmationNumber, receipt){
-        console.log(confirmationNumber);
-    })
-    .on('error', function(error, receipt) {
-        console.log(error);
-    });
-}
-
 function handleSubmitPaymentProposal(event) {
   event.preventDefault();
 
   alert("submitting proposal")
   if ((proposalSharesRq + proposalLootRq + proposalPaymentRq) > 0) {
-    currentDaoContract.methods.submitProposal(
+    props.molochMessenger.submitPaymentProposal(
       proposalApplicant,
       proposalSharesRq,
       proposalLootRq,
-      0,//tribute offered
-      otherConfig.tokenAddress,//token that tribute is made in
       proposalPaymentRq,
-      otherConfig.tokenAddress,//token that payment will be made in
       proposalDetails
-    ).send(
-      {from: props.account}
-    ).on('transactionHash', function(hash){
-        console.log(hash);
-    })
-    .on('receipt', function(receipt){
-        console.log(receipt);
-    })
-    .on('confirmation', function(confirmationNumber, receipt){
-        console.log(confirmationNumber);
-    })
-    .on('error', function(error, receipt) {
-        console.log(error);
-    });
-  }
+    );
+  };
 }
 
-function handleSubmitGuildkickProposal(event) {
-  event.preventDefault();
-
-  alert("submitting proposal")
-  if ((proposalSharesRq + proposalLootRq + proposalPaymentRq) > 0) {
-    currentDaoContract.methods.submitGuildKickProposal(
-      proposalApplicant,
-      proposalDetails
-    ).send(
-      {from: props.account}
-    ).on('transactionHash', function(hash){
-        console.log(hash);
-    })
-    .on('receipt', function(receipt){
-        console.log(receipt);
-    })
-    .on('confirmation', function(confirmationNumber, receipt){
-        console.log(confirmationNumber);
-    })
-    .on('error', function(error, receipt) {
-        console.log(error);
-    });
-  }
-}
-
-
-async function getAndSetNewData() { //called to refresh things
-  const newData = await getData(currentDaoContract);
-  console.log(newData)
-  setCurrentDaoData(newData);
-}
-
-// const [proposalApplicant, setProposalApplicant] = useState('');
-// const [proposalSharesRq, setProposalSharesRq] = useState(0);
-// const [proposalLootRq, setProposalLootRq] = useState(0);
-// const [proposalPaymentRq, setProposalPaymentRq] = useState(0);
-// const [proposalDetails, setProposalDetails] = useState('');
-
-async function handleFastForward(event) {
-  event.preventDefault();
-  currentDaoContract.methods.changeSummoningTime(currentDaoData.summoningTime - 604800).send(
-    {from: props.account}
-  ).on('transactionHash', function(hash){
-      console.log(hash);
-  })
-  .on('receipt', function(receipt){
-      console.log(receipt);
-  })
-  .on('confirmation', function(confirmationNumber, receipt){
-      console.log(confirmationNumber);
-  })
-  .on('error', function(error, receipt) {
-      console.log(error);
-  });
-  getAndSetNewData();
-
-}
-
-function handleTransfer() {
-
-  let tokenContract = new props.web3js.eth.Contract(otherConfig.tokenABI, otherConfig.tokenAddress);
-
-  tokenContract.methods.transfer(currentDaoAddress,1).send(
-  {from: props.account}
-).on('transactionHash', function(hash){
-    console.log(hash);
-})
-.on('receipt', function(receipt){
-    console.log(receipt);
-})
-.on('confirmation', function(confirmationNumber, receipt){
-    console.log(confirmationNumber);
-})
-.on('error', function(error, receipt) {
-    console.log(error);
-});
+async function getAndSetData() {
+  const daoData = await props.molochMessenger.getData();
+  setCurrentDaoData(daoData);
 }
 
 
@@ -355,7 +159,7 @@ function makeProposalForm() {
       </p>
       <p>
       <button
-          onClick={e => handleSubmitGuildkickProposal(e)}>
+          onClick={e => {e.preventDefault();props.molochMessenger.submitGuildKickProposal(proposalApplicant,proposalDetails);}}>
           Submit proposal
       </button>
       </p>
@@ -368,7 +172,9 @@ let proposalList;
 let daoTimeInformation;
 if (currentDaoData) {
   proposalList = currentDaoData.proposalData.map(proposal =>
-      <li key = {currentDaoData.proposalData.propId}><Proposal proposalObj = {proposal} daoContract = {currentDaoContract} account = {props.account}/></li>);
+      <li key = {currentDaoData.proposalData.propId}>
+        <Proposal proposalObj = {proposal} molochMessenger = {props.molochMessenger} account = {props.account}/>
+      </li>);
   daoTimeInformation =
     <div>
       <p>  Dao summoning time: {currentDaoData.originalSummoningTime}</p>;
@@ -391,7 +197,7 @@ if (currentDaoData) {
     {currentDaoAddress}
     </p>
     <ul>
-    {listOfDaos.map(element => <li key = {element}> {makeDaoButton(element)}</li>)}
+    {props.userDaos.map(element => <li key = {element}> {makeDaoButton(element)}</li>)}
     </ul>
     <p>
     Proposals
@@ -411,7 +217,7 @@ if (currentDaoData) {
       withdraw:
       </p>
       <button
-          onClick={() => handleWithdraw(amountToBeWithdrawn)}>
+          onClick={() => props.molochMessenger.withdrawBalance(amountToBeWithdrawn)}>
           Withdraw balance
       </button>
       <p>
@@ -426,20 +232,16 @@ if (currentDaoData) {
       </p>
       {daoTimeInformation}
       <button
-          onClick={e => handleFastForward(e)}>
+          onClick={e => {e.preventDefault();props.molochMessenger.fastForward()}}>
           FF 7 days
       </button>
       <button
-          onClick={() => currentDaoContract.methods.revertSummoningTime().send({from:props.account})}>
+          onClick={e => {e.preventDefault();props.molochMessenger.revertSummoningTime()}}>
           Revert time
       </button>
       <button
-          onClick={e => {e.preventDefault();getAndSetNewData()}}>
+          onClick={e => {e.preventDefault();props.molochMessenger.getData()}}>
           get data
-      </button>
-      <button
-          onClick={e => {e.preventDefault();handleTransfer()}}>
-          Transfer 1 token to contract
       </button>
      </div>
 

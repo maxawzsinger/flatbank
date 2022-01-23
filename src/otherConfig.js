@@ -1,5 +1,5 @@
 const otherConfig = {
-  tokenAddress : '0x2a2D7002c5Aff687e7e53c08E1e0C7aeDf8945E4',
+  tokenAddress : '0x51a5cc25Fa5408389adD4007a4Fabb82641B356f',
 
   tokenABI: [
 	{
