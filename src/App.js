@@ -3,7 +3,7 @@ import {useState, useEffect} from 'react';
 import {summonerContractABI, summonerContractAddress} from './summonerContractConfig';
 import DaoSummonPane from './daoSummonPane';
 import DaoInteractionPane from './daoInteractionPane';
-import {contractConfigs} from './contractConfigs.js';
+import contractConfigs from './contractConfigs.js';
 import {MolochMessenger} from './molochMessenger';
 
 

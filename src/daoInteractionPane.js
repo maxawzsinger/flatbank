@@ -35,7 +35,10 @@ function DaoInteractionPane(props) {
 function makeDaoButton(daoAddress) {
     return (
         <button
-            onClick={() => props.changeDao(daoAddress)}>
+            onClick={() => {
+              props.changeDao(daoAddress);
+              setCurrentDaoAddress(daoAddress);
+            }}>
             {daoAddress}
         </button>
     );
@@ -242,6 +245,10 @@ if (currentDaoData) {
       <button
           onClick={e => {e.preventDefault();props.molochMessenger.getData()}}>
           get data
+      </button>
+      <button
+          onClick={e => {e.preventDefault();props.molochMessenger.sendToDao(1)}}>
+          transfer to DAO
       </button>
      </div>
 
