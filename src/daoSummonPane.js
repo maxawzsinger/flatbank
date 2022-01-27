@@ -1,5 +1,7 @@
 import {useState, useEffect} from 'react';
 import otherConfig from './otherConfig';
+import Button from '@mui/material/Button';
+import BasicTable from './summonerList';
 
 
 function DaoSummonPane(props) { //pass in summonerContract and web3js obj and accout addr to props
@@ -14,6 +16,8 @@ function DaoSummonPane(props) { //pass in summonerContract and web3js obj and ac
   const [enteredSummonerAddress, setEnteredSummonerAddress] = useState('');
   const [enteredSummonerShare, setEnteredSummonerShare] = useState(0);
   const [addressesAndShares, setAddressesAndShares] = useState([]);
+
+  const [muiAddressAndShares, setMuiAddressAndShares] = useState([]);
   //calling contract functions
 
 
@@ -27,7 +31,8 @@ function DaoSummonPane(props) { //pass in summonerContract and web3js obj and ac
     setEnteredSummonerAddress([]);
     setShares([...shares,enteredSummonerShare]);
     setEnteredSummonerShare([]);
-    setDisplayedAddressesAndShares([...displayedAddressesAndShares,`Founding summoner: ${enteredSummonerAddress} (share: ${enteredSummonerShare})`]);
+    setDisplayedAddressesAndShares([...displayedAddressesAndShares,{address: enteredSummonerAddress,shares: enteredSummonerShare}]);
+
     } else {
     alert("summoner already added");
   }
@@ -45,9 +50,7 @@ function DaoSummonPane(props) { //pass in summonerContract and web3js obj and ac
     <p>
       proposed summoners and shares
     </p>
-    <ul>
-    {displayedAddressesAndShares.map(addressAndShare => <li key = {addressAndShare}> {addressAndShare}</li>)}
-    </ul>
+    <BasicTable data={displayedAddressesAndShares}/>
       <p>
         add summoner
       </p>
@@ -69,7 +72,7 @@ function DaoSummonPane(props) { //pass in summonerContract and web3js obj and ac
       </label>
 
     <p>
-    <button onClick={() => handleAddSummoner()}>Add summoner</button>
+    <Button variant = "outlined" onClick={() => handleAddSummoner()}>Add summoner</Button>
 
     <button onClick={() => {setAddresses([]);setShares([]);setEnteredSummonerAddress([]);setEnteredSummonerShare([])}}>CLEAR ALL</button>
 

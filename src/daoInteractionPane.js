@@ -243,7 +243,7 @@ if (currentDaoData) {
           Revert time
       </button>
       <button
-          onClick={e => {e.preventDefault();props.molochMessenger.getData()}}>
+          onClick={e => {e.preventDefault();getAndSetData()}}>
           get data
       </button>
       <button
