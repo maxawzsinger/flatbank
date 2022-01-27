@@ -1,7 +1,12 @@
 import {useState} from 'react';
 import Proposal from './proposal';
 
-
+import * as React from 'react';
+import Box from '@mui/material/Box';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
 
 function DaoInteractionPane(props) {
 
@@ -25,6 +30,7 @@ function DaoInteractionPane(props) {
   const [proposalLootRq, setProposalLootRq] = useState(0);
   const [proposalPaymentRq, setProposalPaymentRq] = useState(0);
   const [proposalDetails, setProposalDetails] = useState('');
+
 
 
 
@@ -202,6 +208,24 @@ if (currentDaoData) {
     <ul>
     {props.userDaos.map(element => <li key = {element}> {makeDaoButton(element)}</li>)}
     </ul>
+
+    <Box sx={{ minWidth: 120 }}>
+      <FormControl fullWidth>
+        <InputLabel id="demo-simple-select-label">DAOs</InputLabel>
+        <Select
+          labelId="demo-simple-select-label"
+          id="demo-simple-select"
+          value=''
+          label="DAOs"
+          onChange={(e) => {props.changeDao(e.target.value);console.log('pressed');}}
+        > {props.userDaos?.map((element) => (
+          <MenuItem value = {element}>{element}</MenuItem>
+        ))}
+        </Select>
+      </FormControl>
+    </Box>
+
+
     <p>
     Proposals
     </p>

@@ -82,6 +82,7 @@ function App() {
    const daoInstance = new web3js.eth.Contract(contractConfigs.molochABI, daoAddress);
    const molochMessenger = new MolochMessenger(summonerContract, tokenContract, daoInstance, account);
    setMolochMessenger(molochMessenger);
+   console.log(daoInstance);
  }
 
 
