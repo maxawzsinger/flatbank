@@ -7,6 +7,7 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
+import MaterialProposal from './materialProposal';
 
 function DaoInteractionPane(props) {
 
@@ -177,12 +178,18 @@ function makeProposalForm() {
   }
 }
 
+let materialProposalList;
+
 let proposalList;
 let daoTimeInformation;
 if (currentDaoData) {
   proposalList = currentDaoData.proposalData.map(proposal =>
       <li key = {currentDaoData.proposalData.propId}>
-        <Proposal proposalObj = {proposal} molochMessenger = {props.molochMessenger} account = {props.account}/>
+        <Proposal proposalObj = {proposal} molochMessenger = {props.molochMessenger} account = {props.account} summoningTime = {currentDaoData.originalSummoningTime}/>
+      </li>);
+  materialProposalList = currentDaoData.proposalData.map(proposal =>
+      <li key = {currentDaoData.proposalData.propId}>
+        <MaterialProposal proposalObj = {proposal} molochMessenger = {props.molochMessenger} account = {props.account} summoningTime = {currentDaoData.originalSummoningTime}/>
       </li>);
   daoTimeInformation =
     <div>
@@ -231,6 +238,9 @@ if (currentDaoData) {
     </p>
     <ul>
     {proposalList}
+    </ul>
+    <ul>
+    {materialProposalList}
     </ul>
       <h3>
       Submit proposal:
