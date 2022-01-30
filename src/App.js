@@ -5,14 +5,20 @@ import DaoSummonPane from './daoSummonPane';
 import DaoInteractionPane from './daoInteractionPane';
 import contractConfigs from './contractConfigs.js';
 import {MolochMessenger} from './molochMessenger';
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
+import Box from '@mui/material/Box';
+import {utilities} from './utilities';
+
+
 
 
 function App() {
 
   const [web3js, setWeb3js] = useState({}); //hold web3 obj
   const [summonerContract, setSummonerContract] = useState({}); //hold summoning contract
-  const [account, setAccount] = useState("no account detected, pls install MetaMask and reload"); //hold user wallet address they are signed into metamask with
-  const [display, setDisplay] = useState("create");
+  const [account, setAccount] = useState(''); //hold user wallet address they are signed into metamask with
+  const [display, setDisplay] = useState("Treasury creation");
   const [molochMessenger, setMolochMessenger] = useState({});
   const [tokenContract, setTokenContract] = useState({});
   const [userDaos, setUserDaos] = useState([]);
@@ -85,20 +91,54 @@ function App() {
    console.log(daoInstance);
  }
 
+ let accountInfo;
+
+ if (account.length == 0) {
+   accountInfo =
+   <Button
+         onClick={() => setDisplay('Treasury management')}>
+         Sign in to Metamask
+   </Button>
+ } else {
+   accountInfo =
+   <Typography
+       variant="body1"
+       gutterBottom
+       component="div"
+       sx = {{mx:2,mt:2, maxWidth:'300px'}}>
+       your web3 account is: {utilities.shortenAddress(account)}
+    </Typography>
+ }
 
 
- if (display == "create") {
+
+ if (display == "Treasury creation") {
 
   return (
 
     <div className="App">
-      <p>
-        your web3 account is: {account}
-      </p>
-      <button
-          onClick={() => setDisplay('interact')}>
+    <Box sx = {{
+      border : '2px solid',
+      borderColor : '#2196f3',
+      borderRadius : '5px',
+      textAlign : 'left',
+      mx: 2
+    }}>
+
+      {accountInfo}
+      <Button
+          onClick={() => setDisplay('Treasury management')}>
           Switch to interact mode
-      </button>
+      </Button>
+      </Box>
+      <Typography
+      variant="h6"
+      gutterBottom
+      component="div"
+      sx = {{mx:2,mt:2}}>
+       Treasury creator
+     </Typography>
+
       <DaoSummonPane molochMessenger = {molochMessenger}/>
     </div>
 
@@ -107,13 +147,21 @@ function App() {
   return (
 
     <div className="App">
-      <p>
-        your web3 account is: {account}
-      </p>
-      <button
-          onClick={() => setDisplay('create')}>
+    <Box sx = {{
+      border : '2px solid',
+      borderColor : '#2196f3',
+      borderRadius : '5px',
+      textAlign : 'left',
+      mx: 2
+    }}>
+    {accountInfo}
+      <Button
+          onClick={() => setDisplay('Treasury creation')}>
           Switch to create mode
-      </button>
+      </Button>
+      </Box>
+
+
       <DaoInteractionPane molochMessenger = {molochMessenger} changeDao = {changeDao} userDaos = {userDaos}/>
     </div>
 

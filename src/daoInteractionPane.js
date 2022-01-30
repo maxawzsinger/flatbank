@@ -8,6 +8,10 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import MaterialProposal from './materialProposal';
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
+import {utilities} from './utilities';
+import ProposalForm from './materialProposalForm';
 
 function DaoInteractionPane(props) {
 
@@ -19,178 +23,78 @@ function DaoInteractionPane(props) {
   const [amountToBeWithdrawn, setAmountToBeWithdrawn] = useState(0);
 
   //CURRENT DAO info
-  const [currentDaoAddress, setCurrentDaoAddress] = useState('No DAO selected');
+  const [currentDaoAddress, setCurrentDaoAddress] = useState('');
   const [currentDaoData, setCurrentDaoData] = useState(0);
-
-  const [proposalType, setProposalType] = useState('payment');
+  const [proposalView, setProposalView] = useState(false);
 
   //SUBMIT PROPOSAL FORM state
 
-  const [proposalApplicant, setProposalApplicant] = useState('');
-  const [proposalSharesRq, setProposalSharesRq] = useState(0);
-  const [proposalLootRq, setProposalLootRq] = useState(0);
-  const [proposalPaymentRq, setProposalPaymentRq] = useState(0);
-  const [proposalDetails, setProposalDetails] = useState('');
 
 
 
 
 /////////////////////ONLOAD
-
-
-
-function makeDaoButton(daoAddress) {
-    return (
-        <button
-            onClick={() => {
-              props.changeDao(daoAddress);
-              setCurrentDaoAddress(daoAddress);
-            }}>
-            {daoAddress}
-        </button>
-    );
-}
-
-
-
-function handleSubmitPaymentProposal(event) {
-  event.preventDefault();
-
-  alert("submitting proposal")
-  if ((proposalSharesRq + proposalLootRq + proposalPaymentRq) > 0) {
-    props.molochMessenger.submitPaymentProposal(
-      proposalApplicant,
-      proposalSharesRq,
-      proposalLootRq,
-      proposalPaymentRq,
-      proposalDetails
-    );
-  };
-}
-
 async function getAndSetData() {
   const daoData = await props.molochMessenger.getData();
   setCurrentDaoData(daoData);
 }
 
 
-function makeProposalForm() {
-  if (proposalType === 'payment') {
-    return(
-      <div>
-      <button
-          onClick={() => setProposalType('guildkick')}>
-          Propose to kick a member
-      </button>
-      <p>
-      <label>
-      Transaction to (hex address):
-        <input
-          type="text"
-          value={proposalApplicant}
-          onChange={e => setProposalApplicant(e.target.value)}
-        />
-      </label>
-      </p>
-      <p>
-      <label>
-      Number of voting shares to be dispensed:
-        <input
-          type="number"
-          value={proposalSharesRq}
-          onChange={e => setProposalSharesRq(e.target.value)}
-        />
-      </label>
-      </p>
-      <p>
-      <label>
-      Number of non-voting shares to be dispensed:
-        <input
-          type="number"
-          value={proposalLootRq}
-          onChange={e => setProposalLootRq(e.target.value)}
-        />
-      </label>
-      </p>
-      <p>
-      <label>
-      Amount of payment to be dispensed:
-        <input
-          type="number"
-          value={proposalPaymentRq}
-          onChange={e => setProposalPaymentRq(e.target.value)}
-        />
-      </label>
-      </p>
-      <p>
-      <label>
-      Proposal details:
-        <input
-          type="text"
-          value={proposalDetails}
-          onChange={e => setProposalDetails(e.target.value)}
-        />
-      </label>
-      </p>
-      <p>
-      <button
-          onClick={e => handleSubmitPaymentProposal(e)}>
-          Submit proposal
-      </button>
-      </p>
-      </div>
-    )
-  } else if (proposalType === 'guildkick'){
-    return(
-      <div>
-      <button
-          onClick={() => setProposalType('payment')}>
-          Propose to make a payment
-      </button>
-      <p>
-      <label>
-      Member to kick (hex address):
-        <input
-          type="text"
-          value={proposalApplicant}
-          onChange={e => setProposalApplicant(e.target.value)}
-        />
-      </label>
-      </p>
-      <p>
-      <label>
-      Proposal details:
-        <input
-          type="text"
-          value={proposalDetails}
-          onChange={e => setProposalDetails(e.target.value)}
-        />
-      </label>
-      </p>
-      <p>
-      <button
-          onClick={e => {e.preventDefault();props.molochMessenger.submitGuildKickProposal(proposalApplicant,proposalDetails);}}>
-          Submit proposal
-      </button>
-      </p>
-      </div>
-    )
-  }
+function makeDaoButton(daoAddress) {
+    return (
+        <Button
+            onClick={() => {
+              props.changeDao(daoAddress);
+              setCurrentDaoAddress(daoAddress);
+              getAndSetData();
+            }}>
+            {utilities.shortenAddress(daoAddress)}
+        </Button>
+    );
 }
 
-let materialProposalList;
+//SNIPPIT OF CODE FOR DROP DOWN MENU, was problmatic showing loaded dao addres "cannot read properties of undefined reading value"
+// <Box sx={{ minWidth: 120, maxWidth:500 }}>
+//   <FormControl fullWidth>
+//     <InputLabel id="demo-simple-select-label">DAOs</InputLabel>
+//     <Select
+//       labelId="demo-simple-select-label"
+//       id="demo-simple-select"
+//       label="DAOs"
+//       value = ''
+//       onChange={(e) => {props.changeDao(e.target.value);setCurrentDaoAddress(e.target.value);}}
+//     > {props.userDaos?.map((element) => (
+//       <MenuItem value = {element}>{element}</MenuItem>
+//     ))}
+//     </Select>
+//   </FormControl>
+// </Box>
+
+
+
+
+
+function makeProposal(proposal) {
+  return  <MaterialProposal
+  proposalObj = {proposal}
+  molochMessenger = {props.molochMessenger}
+  account = {props.account}
+  summoningTime = {currentDaoData.originalSummoningTime}/>
+};
+
+
+
 
 let proposalList;
 let daoTimeInformation;
 if (currentDaoData) {
   proposalList = currentDaoData.proposalData.map(proposal =>
-      <li key = {currentDaoData.proposalData.propId}>
-        <Proposal proposalObj = {proposal} molochMessenger = {props.molochMessenger} account = {props.account} summoningTime = {currentDaoData.originalSummoningTime}/>
-      </li>);
-  materialProposalList = currentDaoData.proposalData.map(proposal =>
-      <li key = {currentDaoData.proposalData.propId}>
-        <MaterialProposal proposalObj = {proposal} molochMessenger = {props.molochMessenger} account = {props.account} summoningTime = {currentDaoData.originalSummoningTime}/>
-      </li>);
+        <MaterialProposal
+        proposalObj = {proposal}
+        molochMessenger = {props.molochMessenger}
+        account = {props.account}
+        summoningTime = {currentDaoData.originalSummoningTime}/>
+      );
   daoTimeInformation =
     <div>
       <p>  Dao summoning time: {currentDaoData.originalSummoningTime}</p>;
@@ -202,50 +106,94 @@ if (currentDaoData) {
 }
 
 
+  if (currentDaoAddress.length ==0) {
+    return (
+      <div className="DaoInteractionPane">
+      <Typography
+      variant="h6"
+      gutterBottom
+      component="div"
+      sx = {{mx:2,mt:2}}>
+       Select a treasury
+     </Typography>
+
+      <Box sx = {{
+        border : '2px solid',
+        borderColor : '#2196f3',
+        borderRadius : '5px',
+        textAlign : 'left',
+        mx: 2,
+        my:2
+      }}>
+      {props.userDaos?.map((element) => makeDaoButton(element))}
+
+      </Box>
+      </div>
+    )
+  } else {
+
+
   return (
 
     <div className="DaoInteractionPane">
-    <h1>
-    Interact with DAO
-    </h1>
-    Currently interacting with DAO at address:
-    <p>
-    {currentDaoAddress}
-    </p>
-    <ul>
-    {props.userDaos.map(element => <li key = {element}> {makeDaoButton(element)}</li>)}
-    </ul>
 
-    <Box sx={{ minWidth: 120, maxWidth:500 }}>
-      <FormControl fullWidth>
-        <InputLabel id="demo-simple-select-label">DAOs</InputLabel>
-        <Select
-          labelId="demo-simple-select-label"
-          id="demo-simple-select"
-          value=''
-          label="DAOs"
-          onChange={(e) => {props.changeDao(e.target.value);console.log('pressed');}}
-        > {props.userDaos?.map((element) => (
-          <MenuItem value = {element}>{element}</MenuItem>
-        ))}
-        </Select>
-      </FormControl>
+
+    <Box sx = {{
+      border : '2px solid',
+      borderColor : '#2196f3',
+      borderRadius : '5px',
+      textAlign : 'left',
+      mx: 2,
+      my : 2
+    }}>
+    {props.userDaos?.map((element) => makeDaoButton(element))}
+
     </Box>
+    <Typography
+    variant="h6"
+    gutterBottom
+    component="div"
+    sx = {{mx:2,mt:2}}>
+    Treasury {utilities.shortenAddress(currentDaoAddress)}
+   </Typography>
+   <Box sx = {{
+     border : '2px solid',
+     borderColor : '#2196f3',
+     borderRadius : '5px',
+     textAlign : 'left',
+     mx: 2,
+     my : 2
+   }}>
+   <Typography
+   variant="body1"
+   gutterBottom
+   component="div"
+   sx = {{mx:2,mt:2}}>
+   About treasury:
+  </Typography>
 
+   </Box>
+   <Box sx = {{
+     border : '2px solid',
+     borderColor : '#2196f3',
+     borderRadius : '5px',
+     textAlign : 'left',
+     mx: 2,
+     my : 2
+   }}>
 
-    <p>
-    Proposals
-    </p>
-    <ul>
-    {proposalList}
-    </ul>
-    <ul>
-    {materialProposalList}
-    </ul>
-      <h3>
-      Submit proposal:
-      </h3>
-      {makeProposalForm()}
+   {proposalList}
+
+   </Box>
+
+   <Button
+       onClick={() => {
+         setProposalView(!proposalView);
+       }}>
+       {proposalView? 'Make proposal △' : 'Make proposal ▽'}
+   </Button>
+
+      {proposalView && <ProposalForm molochMessenger = {props.molochMessenger}/>}
 
       <p>
       _______________________________________
@@ -287,6 +235,7 @@ if (currentDaoData) {
      </div>
 
   );
+};
 }
 
 export default DaoInteractionPane;

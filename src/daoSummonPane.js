@@ -5,6 +5,7 @@ import FounderList from './FounderList';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
+import {utilities} from './utilities';
 
 
 function DaoSummonPane(props) { //pass in summonerContract and web3js obj and accout addr to props
@@ -17,7 +18,7 @@ function DaoSummonPane(props) { //pass in summonerContract and web3js obj and ac
   const [shares,setShares] = useState([]);
   const [displayedAddressesAndShares, setDisplayedAddressesAndShares] = useState([]);
   const [enteredSummonerAddress, setEnteredSummonerAddress] = useState('');
-  const [enteredSummonerShare, setEnteredSummonerShare] = useState();
+  const [enteredSummonerShare, setEnteredSummonerShare] = useState('');
   const [addressesAndShares, setAddressesAndShares] = useState([]);
 
   const [muiAddressAndShares, setMuiAddressAndShares] = useState([]);
@@ -46,13 +47,6 @@ function DaoSummonPane(props) { //pass in summonerContract and web3js obj and ac
   return (
 
   <div className="DaoSummonPane">
-    <h1>
-    Create a contract
-    </h1>
-
-    <p>
-      proposed summoners and shares
-    </p>
     <FounderList data={displayedAddressesAndShares}/>
 
 
@@ -60,15 +54,16 @@ function DaoSummonPane(props) { //pass in summonerContract and web3js obj and ac
         border : '2px solid',
         borderColor : '#2196f3',
         borderRadius : '5px',
-        textAlign : 'left'
+        textAlign : 'left',
+        mx: 2
       }}>
       <Typography
       variant="h6"
       gutterBottom
       component="div"
       sx = {{mx:2,mt:2}}>
-   Add summoner
- </Typography>
+       Add summoner
+     </Typography>
       <TextField
         sx={{
           mx : 2,
@@ -106,18 +101,18 @@ function DaoSummonPane(props) { //pass in summonerContract and web3js obj and ac
           setEnteredSummonerShare([])}
         }>Clear all</Button>
         </p>
-        <Button
-        sx = {{
-          mx : 2,
-          mb : 2,
-        }}
-        variant = "outlined"
-        onClick={() => props.molochMessenger.summon(addresses,shares)}
-        >Summon dao
-        </Button>
+
 
       </Box>
-
+      <Button
+      sx = {{
+        mx : 2,
+        my : 2,
+      }}
+      variant = "outlined"
+      onClick={() => props.molochMessenger.summon(addresses,parseInt(shares))} //parse string to integer
+      >Summon dao
+      </Button>
 
 
   </div>

@@ -36,5 +36,8 @@ export const utilities = {
 
       }
     }
+  },
+  shortenAddress : function(address) {
+    return (address.substring(0,5) + '...' +address.substring(address.length-3)).toLowerCase();
   }
 };
