@@ -8,13 +8,13 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 
 
-export default function BasicTable(props) {
+export default function FounderList(props) {
   return (
     <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 650 }} aria-label="simple table">
+      <Table sx={{ minWidth: 100, maxWidth : 500 }} aria-label="simple table">
         <TableHead>
           <TableRow>
-            <TableCell>Address</TableCell>
+            <TableCell>Address1</TableCell>
             <TableCell align="right">Shares</TableCell>
           </TableRow>
         </TableHead>

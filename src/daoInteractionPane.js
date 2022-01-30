@@ -216,7 +216,7 @@ if (currentDaoData) {
     {props.userDaos.map(element => <li key = {element}> {makeDaoButton(element)}</li>)}
     </ul>
 
-    <Box sx={{ minWidth: 120 }}>
+    <Box sx={{ minWidth: 120, maxWidth:500 }}>
       <FormControl fullWidth>
         <InputLabel id="demo-simple-select-label">DAOs</InputLabel>
         <Select
