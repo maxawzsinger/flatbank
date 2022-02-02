@@ -1,6 +1,5 @@
 import {useState, useEffect} from 'react';
-import otherConfig from './otherConfig';
-import {utilities} from './utilities';
+import {utilities} from '../utilities';
 
 //TO DO - need to properly pass in props as has been specified in here - mostly the entire proposal object for each proposal component, as well as a props.account, props. daoContract
 function Proposal(props) { //pass in summonerContract and web3js obj and accout addr to props

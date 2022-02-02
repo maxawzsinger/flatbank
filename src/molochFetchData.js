@@ -1,4 +1,3 @@
-import otherConfig from './otherConfig';
 import contractConfigs from './contractConfigs';
 
 async function getData(daoContract) {
@@ -100,6 +99,16 @@ async function getData(daoContract) {
         proposalData.propIndex = proposalQueueMap[i];
       }
       proposalData.currentPeriod = currentPeriod;
+      if ((currentPeriod == proposalData.startingPeriod) && flags[0] == true) {
+        proposalData.status = 'In voting stage';
+      } else if (currentPeriod - 7 == proposalData.startingPeriod){
+        proposalData.status = 'In grace stage';
+      } else if (currentPeriod < proposalData.startingPeriod) {
+        proposalData.status = 'Pre-voting stage';
+      } else {
+        proposalData.status = 'Not yet scheduled';
+      }
+      console.log('prop status', proposalData.status);
       proposalDataArray.push(proposalData);
       console.log('proposal: ', proposalData);
     }

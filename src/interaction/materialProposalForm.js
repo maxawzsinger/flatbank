@@ -1,17 +1,15 @@
 import {useState} from 'react';
-import Proposal from './proposal';
-
 import * as React from 'react';
+
+//mui components
 import Box from '@mui/material/Box';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
-import MaterialProposal from './materialProposal';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-import {utilities} from './utilities';
 import TextField from '@mui/material/TextField';
+
+//functionality
+import {utilities} from '../utilities';
+
 
 
 
@@ -39,8 +37,9 @@ function ProposalForm(props) {
     };
   }
 
-  if (proposalType === 'payment') {
-    return(
+//adds more or less textfields depending on proposal type
+    return (
+
       <Box sx = {{
         maxWidth : '300px',
         border : '2px solid',
@@ -51,10 +50,16 @@ function ProposalForm(props) {
         my:2
       }}>
 
-      <Button
+      {proposalType === 'guildkick'
+      ?<Button
+          onClick={() => setProposalType('payment')}>
+          Propose to make a payment
+      </Button>
+      :<Button
           onClick={() => setProposalType('guildkick')}>
           Propose to kick a member
       </Button>
+    }
       <TextField
         sx={{
           mx : 2,
@@ -68,6 +73,9 @@ function ProposalForm(props) {
         value = {applicant}
         onChange = {e => setApplicant(e.target.value)}
         />
+
+        {proposalType === 'payment' &&
+        <div>
         <TextField
           sx={{
             mx : 2,
@@ -107,58 +115,9 @@ function ProposalForm(props) {
               value = {payment}
               onChange = {e => setPayment(e.target.value)}
               />
-              <TextField
-                sx={{
-                  mx : 2,
-                  mt : 2,
-                  alignSelf : 'stretch'
+              </div>
+      }
 
-                }}
-                label = 'Proposal details:'
-                id="outlined-basic"
-                variant="outlined"
-                value = {details}
-                onChange = {e => setDetails(e.target.value)}
-                />
-
-
-      <Button
-          onClick={e => handleSubmitPaymentProposal(e)}>
-          Submit proposal
-      </Button>
-      </Box>
-    )
-  } else if (proposalType === 'guildkick'){
-
-    return (
-
-      <Box sx = {{
-        maxWidth : '300px',
-        border : '2px solid',
-        borderColor : '#2196f3',
-        borderRadius : '5px',
-        textAlign : 'left',
-        mx: 2,
-        my:2        
-      }}>
-
-      <Button
-          onClick={() => setProposalType('payment')}>
-          Propose to make a payment
-      </Button>
-      <TextField
-        sx={{
-          mx : 2,
-          mt : 2,
-          alignSelf : 'stretch'
-
-        }}
-        label = 'Transaction to (hex address):'
-        id="outlined-basic"
-        variant="outlined"
-        value = {applicant}
-        onChange = {e => setApplicant(e.target.value)}
-        />
       <TextField
         sx={{
           mx : 2,
@@ -172,13 +131,19 @@ function ProposalForm(props) {
         value = {details}
         onChange = {e => setDetails(e.target.value)}
         />
-      <Button
+      {proposalType==='guildkick'
+      ?<Button
           onClick={e => {e.preventDefault();props.molochMessenger.submitGuildKickProposal(applicant,details);}}>
-          Submit proposal
+          Submit kick proposal
       </Button>
+      :<Button
+          onClick={e => handleSubmitPaymentProposal(e)}>
+          Submit payment proposal
+      </Button>
+      }
       </Box>
     )
-  }
+
 }
 
 export default ProposalForm;

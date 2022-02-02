@@ -1,40 +1,36 @@
 import {useState, useEffect} from 'react';
-import otherConfig from './otherConfig';
-import Button from '@mui/material/Button';
-import FounderList from './FounderList';
-import Box from '@mui/material/Box';
-import TextField from '@mui/material/TextField';
-import Typography from '@mui/material/Typography';
+
+//custom components
+import FounderList from './creation/FounderList';
+
+//functionality
 import {utilities} from './utilities';
 
+//mui components
+import Typography from '@mui/material/Typography';
+import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button';
+import Box from '@mui/material/Box';
 
 function DaoSummonPane(props) { //pass in summonerContract and web3js obj and accout addr to props
 
-
-//TRANSACTION SETTINGS
-  // const [templateAddress, setTemplateAddress] = useState("");
-
-  const [addresses,setAddresses] = useState([]);
-  const [shares,setShares] = useState([]);
-  const [displayedAddressesAndShares, setDisplayedAddressesAndShares] = useState([]);
-  const [enteredSummonerAddress, setEnteredSummonerAddress] = useState('');
-  const [enteredSummonerShare, setEnteredSummonerShare] = useState('');
-  const [addressesAndShares, setAddressesAndShares] = useState([]);
-
-  const [muiAddressAndShares, setMuiAddressAndShares] = useState([]);
-  //calling contract functions
-
-
-
-//ADD TO FORM BUTTONS FOR adding dao members and corresponding membership share, one by one for below function to use
+  const [addresses,setAddresses] = useState([]); //for molochmessenger summon method
+  const [shares,setShares] = useState([]);//for moloch messenger summon method
+  const [displayedAddressesAndShares, setDisplayedAddressesAndShares] = useState([]); //for passing to founderlist component
+  const [enteredSummonerAddress, setEnteredSummonerAddress] = useState(''); //for display in texfield
+  const [enteredSummonerShare, setEnteredSummonerShare] = useState(''); //for display in textfield
 
 
   function handleAddSummoner(){
+    //first check if this founder has already been added
     if (!addresses.includes(enteredSummonerAddress)) {
+    //add founder wallet address and shares to array in state
     setAddresses([...addresses,enteredSummonerAddress]);
-    setEnteredSummonerAddress([]);
     setShares([...shares,enteredSummonerShare]);
+    //reset textfields
+    setEnteredSummonerAddress([]);
     setEnteredSummonerShare([]);
+    //update array being passed for display to founder list component
     setDisplayedAddressesAndShares([...displayedAddressesAndShares,{address: enteredSummonerAddress,shares: enteredSummonerShare}]);
 
     } else {
