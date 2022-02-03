@@ -22,19 +22,23 @@ function ProposalForm(props) {
   const [details, setDetails] = useState('');
   const [proposalType, setProposalType] = useState('payment');
 
-  function handleSubmitPaymentProposal(event) {
+  async function handleSubmitPaymentProposal(event) {
     event.preventDefault();
 
     alert("submitting proposal")
     if ((shares + loot + payment) > 0) {
-      props.molochMessenger.submitPaymentProposal(
+
+      const receipt = await props.molochMessenger.submitPaymentProposal(
         applicant,
         shares,
         loot,
         payment,
         details
       );
-    };
+      console.log('receipt in comp: ',receipt);
+    } else {
+      alert('payment amount is 0');
+    }
   }
 
 //adds more or less textfields depending on proposal type
@@ -51,13 +55,30 @@ function ProposalForm(props) {
       }}>
 
       {proposalType === 'guildkick'
+      ?      <Typography
+            variant="h6"
+            gutterBottom
+            component="div"
+            sx = {{mx:2,mt:2}}>
+             Proposing to kick member
+           </Typography>
+      :      <Typography
+            variant="h6"
+            gutterBottom
+            component="div"
+            sx = {{mx:2,mt:2}}>
+             Proposing to make payment
+           </Typography>
+    }
+
+      {proposalType === 'guildkick'
       ?<Button
           onClick={() => setProposalType('payment')}>
-          Propose to make a payment
+          Propose to make a payment instead
       </Button>
       :<Button
           onClick={() => setProposalType('guildkick')}>
-          Propose to kick a member
+          Propose to kick a member instead
       </Button>
     }
       <TextField

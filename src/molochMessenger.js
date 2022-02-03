@@ -6,7 +6,7 @@ import getData from './molochFetchData.js';
 
 // initialize object const = {}
 
-export function MolochMessenger(summon, token, dao, account) {
+export function MolochMessenger(summon, token, dao, account, updateTXReceipt) {
   //summoner is summonMoloch web3js contract, dao is daoInstance contract, token is token contract
 
   this.voteOnProposal = function(proposalIndex,voteType) {
@@ -17,6 +17,9 @@ export function MolochMessenger(summon, token, dao, account) {
     })
     .on('receipt', function(receipt){
         console.log(receipt);
+        updateTXReceipt(receipt);
+
+
     })
     .on('confirmation', function(confirmationNumber, receipt){
         console.log(confirmationNumber);
@@ -31,9 +34,15 @@ export function MolochMessenger(summon, token, dao, account) {
       {from: account}
     ).on('transactionHash', function(hash){
         console.log(hash);
+        console.log('logged');
     })
     .on('receipt', function(receipt){
         console.log(receipt);
+        console.log('tx received');
+
+        updateTXReceipt(receipt);
+        console.log('log',this.lastTransactionReceipt);
+
     })
     .on('confirmation', function(confirmationNumber, receipt){
         console.log(confirmationNumber);
@@ -51,6 +60,8 @@ export function MolochMessenger(summon, token, dao, account) {
     })
     .on('receipt', function(receipt){
         console.log(receipt);
+        updateTXReceipt(receipt);
+
     })
     .on('confirmation', function(confirmationNumber, receipt){
         console.log(confirmationNumber);
@@ -70,6 +81,8 @@ export function MolochMessenger(summon, token, dao, account) {
     })
     .on('receipt', function(receipt){
         console.log(receipt);
+        updateTXReceipt(receipt);
+
     })
     .on('confirmation', function(confirmationNumber, receipt){
         console.log(confirmationNumber);
@@ -89,11 +102,11 @@ export function MolochMessenger(summon, token, dao, account) {
 
     dao.methods.submitProposal(
       applicant,
-      sharesRequested,
-      lootRequested,
+      parseInt(sharesRequested),
+      parseInt(lootRequested),
       0, //0 is tribute offered
       contractConfigs.tokenAddress,
-      paymentRequested,
+      parseInt(paymentRequested),
       contractConfigs.tokenAddress,
       details
     ).send(
@@ -103,6 +116,11 @@ export function MolochMessenger(summon, token, dao, account) {
     })
     .on('receipt', function(receipt){
         console.log(receipt);
+        console.log('tx received');
+        updateTXReceipt(receipt);
+        console.log('log',this.lastTransactionReceipt);
+
+
     })
     .on('confirmation', function(confirmationNumber, receipt){
         console.log(confirmationNumber);
@@ -110,6 +128,7 @@ export function MolochMessenger(summon, token, dao, account) {
     .on('error', function(error, receipt) {
         console.log(error);
     });
+    console.log('pingers');
 
   }
 
@@ -121,6 +140,8 @@ export function MolochMessenger(summon, token, dao, account) {
     })
     .on('receipt', function(receipt){
         console.log(receipt);
+        updateTXReceipt(receipt);
+
     })
     .on('confirmation', function(confirmationNumber, receipt){
         console.log(confirmationNumber);
@@ -145,6 +166,8 @@ export function MolochMessenger(summon, token, dao, account) {
   })
   .on('receipt', function(receipt){
       console.log(receipt);
+      updateTXReceipt(receipt);
+
   })
   .on('confirmation', function(confirmationNumber, receipt){
       console.log(confirmationNumber);
@@ -175,6 +198,8 @@ export function MolochMessenger(summon, token, dao, account) {
     })
     .on('receipt', function(receipt){
         console.log(receipt);
+        updateTXReceipt(receipt);
+
     })
     .on('confirmation', function(confirmationNumber, receipt){
         console.log(confirmationNumber);
@@ -196,6 +221,8 @@ export function MolochMessenger(summon, token, dao, account) {
     })
     .on('receipt', function(receipt){
         console.log(receipt);
+        updateTXReceipt(receipt);
+
     })
     .on('confirmation', function(confirmationNumber, receipt){
         console.log(confirmationNumber);
@@ -213,6 +240,8 @@ export function MolochMessenger(summon, token, dao, account) {
     })
     .on('receipt', function(receipt){
         console.log(receipt);
+        updateTXReceipt(receipt);
+
     })
     .on('confirmation', function(confirmationNumber, receipt){
         console.log(confirmationNumber);

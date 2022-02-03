@@ -19,9 +19,10 @@ function DaoInteractionPane(props) {
 
   //CURRENT DAO info
   const [currentDaoAddress, setCurrentDaoAddress] = useState('');
-  const [currentDaoData, setCurrentDaoData] = useState(0);
+  const [currentDaoData, setCurrentDaoData] = useState('');
   const [proposalView, setProposalView] = useState(false);
 
+  const [lastTransactionReceipt, setLastTransactionReceipt] = useState({});
   //SUBMIT PROPOSAL FORM state
 
 async function getAndSetData() { //fetches data about the DAO
@@ -48,10 +49,22 @@ const MINUTE_MS = 60000;
 useEffect(() => {
   const interval = setInterval(() => {
     getAndSetData();
+    setLastTransactionReceipt({});
   }, MINUTE_MS);
 
   return () => clearInterval(interval); // This represents the unmount function, in which you need to clear your interval to prevent memory leaks.
 }, [])
+
+// useEffect(() => {
+//   setLastTransactionReceipt(props.molochMessenger.lastTransactionReceipt);
+//   console.log('receipted tx hash', lastTransactionReceipt);
+// }, [props.molochMessenger.lastTransactionReceipt])
+
+useEffect(() => {
+  getAndSetData();
+  console.log('receipted tx recipt');
+}, [props.receipts])
+
 
 
 function makeProposal(proposal) {
