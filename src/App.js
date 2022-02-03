@@ -25,11 +25,11 @@ function App() {
   const [summonerContract, setSummonerContract] = useState({}); //hold summoning contract
   const [tokenContract, setTokenContract] = useState({});
   const [molochMessenger, setMolochMessenger] = useState({});
-  const [lastTXReceipt,setLastTXReceipt] = useState({})
+  const [lastTXReturn,setLastTXReturn] = useState({})
 
   //important notes - web3js signals a verified transaction by returning a tx receipt. molochmessenger takes in
-  //the setLastTXReceipt() as a parameter and uses this to pass txreceipt data to App.js which then passes this to dao INTERACTION
-  //pane as props. inside, daoInteractionPane uses useEffect to trigger a data refresh 
+  //the setLastTXReturn() as a parameter and uses this to pass txreceipt data to App.js which then passes this to dao INTERACTION
+  //pane as props. inside, daoInteractionPane uses useEffect to trigger a data refresh
 
   //display
   const [screenType, setScreenType] = useState("Treasury creation"); //controls screen screenType (interact or creation)
@@ -105,7 +105,7 @@ if(window.ethereum!==undefined) {
   if (usersDaos.length > 0) {
     const daoInstance = new web3Obj.eth.Contract(contractConfigs.molochABI, usersDaos[0]);
 
-    const molochMessenger = new MolochMessenger(summonerContract, tokenContract, daoInstance, accounts[0], setLastTXReceipt);
+    const molochMessenger = new MolochMessenger(summonerContract, tokenContract, daoInstance, accounts[0], setLastTXReturn);
     setMolochMessenger(molochMessenger);
 
   }
@@ -121,7 +121,7 @@ if(window.ethereum!==undefined) {
 // FUNCTION TO BUILD A NEW molochMessenger IF THE USER SWITCHES DAOs THEY ARE INTERACTING WITH
  function changeDao(daoAddress) {
    const daoInstance = new web3js.eth.Contract(contractConfigs.molochABI, daoAddress);
-   const molochMessenger = new MolochMessenger(summonerContract, tokenContract, daoInstance, account, setLastTXReceipt);
+   const molochMessenger = new MolochMessenger(summonerContract, tokenContract, daoInstance, account, setLastTXReturn);
    setMolochMessenger(molochMessenger);
    console.log(daoInstance);
  }
@@ -222,7 +222,7 @@ if(window.ethereum!==undefined) {
     </Box>
     {screenType==='Treasury creation'
     ? <DaoSummonPane molochMessenger = {molochMessenger}/>
-    : <DaoInteractionPane molochMessenger = {molochMessenger} changeDao = {changeDao} userDaos = {userDaos} receipts={lastTXReceipt}/>
+    : <DaoInteractionPane molochMessenger = {molochMessenger} changeDao = {changeDao} userDaos = {userDaos} lastTXReturn={lastTXReturn}/>
   }
 
   </div>

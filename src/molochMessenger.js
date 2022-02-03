@@ -6,7 +6,7 @@ import getData from './molochFetchData.js';
 
 // initialize object const = {}
 
-export function MolochMessenger(summon, token, dao, account, updateTXReceipt) {
+export function MolochMessenger(summon, token, dao, account, updateTXReturn) {
   //summoner is summonMoloch web3js contract, dao is daoInstance contract, token is token contract
 
   this.voteOnProposal = function(proposalIndex,voteType) {
@@ -17,7 +17,7 @@ export function MolochMessenger(summon, token, dao, account, updateTXReceipt) {
     })
     .on('receipt', function(receipt){
         console.log(receipt);
-        updateTXReceipt(receipt);
+        updateTXReturn(receipt);
 
 
     })
@@ -26,6 +26,7 @@ export function MolochMessenger(summon, token, dao, account, updateTXReceipt) {
     })
     .on('error', function(error, receipt) {
         console.log(error);
+        updateTXReturn(error);
     });
   }
 
@@ -40,7 +41,7 @@ export function MolochMessenger(summon, token, dao, account, updateTXReceipt) {
         console.log(receipt);
         console.log('tx received');
 
-        updateTXReceipt(receipt);
+        updateTXReturn(receipt);
         console.log('log',this.lastTransactionReceipt);
 
     })
@@ -49,6 +50,8 @@ export function MolochMessenger(summon, token, dao, account, updateTXReceipt) {
     })
     .on('error', function(error, receipt) {
         console.log(error);
+        updateTXReturn(error);
+
     });
   }
 
@@ -60,7 +63,7 @@ export function MolochMessenger(summon, token, dao, account, updateTXReceipt) {
     })
     .on('receipt', function(receipt){
         console.log(receipt);
-        updateTXReceipt(receipt);
+        updateTXReturn(receipt);
 
     })
     .on('confirmation', function(confirmationNumber, receipt){
@@ -68,6 +71,8 @@ export function MolochMessenger(summon, token, dao, account, updateTXReceipt) {
     })
     .on('error', function(error, receipt) {
         console.log(error);
+        updateTXReturn(error);
+
     });
   }
 
@@ -81,7 +86,7 @@ export function MolochMessenger(summon, token, dao, account, updateTXReceipt) {
     })
     .on('receipt', function(receipt){
         console.log(receipt);
-        updateTXReceipt(receipt);
+        updateTXReturn(receipt);
 
     })
     .on('confirmation', function(confirmationNumber, receipt){
@@ -89,6 +94,8 @@ export function MolochMessenger(summon, token, dao, account, updateTXReceipt) {
     })
     .on('error', function(error, receipt) {
         console.log(error);
+        updateTXReturn(error);
+
     });
   }
 
@@ -117,7 +124,7 @@ export function MolochMessenger(summon, token, dao, account, updateTXReceipt) {
     .on('receipt', function(receipt){
         console.log(receipt);
         console.log('tx received');
-        updateTXReceipt(receipt);
+        updateTXReturn(receipt);
         console.log('log',this.lastTransactionReceipt);
 
 
@@ -127,6 +134,8 @@ export function MolochMessenger(summon, token, dao, account, updateTXReceipt) {
     })
     .on('error', function(error, receipt) {
         console.log(error);
+        updateTXReturn(error);
+
     });
     console.log('pingers');
 
@@ -140,7 +149,7 @@ export function MolochMessenger(summon, token, dao, account, updateTXReceipt) {
     })
     .on('receipt', function(receipt){
         console.log(receipt);
-        updateTXReceipt(receipt);
+        updateTXReturn(receipt);
 
     })
     .on('confirmation', function(confirmationNumber, receipt){
@@ -148,6 +157,8 @@ export function MolochMessenger(summon, token, dao, account, updateTXReceipt) {
     })
     .on('error', function(error, receipt) {
         console.log(error);
+        updateTXReturn(error);
+
     });
 
   };
@@ -166,7 +177,7 @@ export function MolochMessenger(summon, token, dao, account, updateTXReceipt) {
   })
   .on('receipt', function(receipt){
       console.log(receipt);
-      updateTXReceipt(receipt);
+      updateTXReturn(receipt);
 
   })
   .on('confirmation', function(confirmationNumber, receipt){
@@ -174,6 +185,8 @@ export function MolochMessenger(summon, token, dao, account, updateTXReceipt) {
   })
   .on('error', function(error, receipt) {
       console.log(error);
+      updateTXReturn(error);
+
   });
 
   }
@@ -198,7 +211,7 @@ export function MolochMessenger(summon, token, dao, account, updateTXReceipt) {
     })
     .on('receipt', function(receipt){
         console.log(receipt);
-        updateTXReceipt(receipt);
+        updateTXReturn(receipt);
 
     })
     .on('confirmation', function(confirmationNumber, receipt){
@@ -206,6 +219,8 @@ export function MolochMessenger(summon, token, dao, account, updateTXReceipt) {
     })
     .on('error', function(error, receipt) {
         console.log(error);
+        updateTXReturn(error);
+
     })
   };
 
@@ -221,7 +236,7 @@ export function MolochMessenger(summon, token, dao, account, updateTXReceipt) {
     })
     .on('receipt', function(receipt){
         console.log(receipt);
-        updateTXReceipt(receipt);
+        updateTXReturn(receipt);
 
     })
     .on('confirmation', function(confirmationNumber, receipt){
@@ -229,6 +244,8 @@ export function MolochMessenger(summon, token, dao, account, updateTXReceipt) {
     })
     .on('error', function(error, receipt) {
         console.log(error);
+        updateTXReturn(error);
+
     });
   }
 
@@ -240,7 +257,7 @@ export function MolochMessenger(summon, token, dao, account, updateTXReceipt) {
     })
     .on('receipt', function(receipt){
         console.log(receipt);
-        updateTXReceipt(receipt);
+        updateTXReturn(receipt);
 
     })
     .on('confirmation', function(confirmationNumber, receipt){
@@ -248,6 +265,8 @@ export function MolochMessenger(summon, token, dao, account, updateTXReceipt) {
     })
     .on('error', function(error, receipt) {
         console.log(error);
+        updateTXReturn(error);
+
     });
   }
 

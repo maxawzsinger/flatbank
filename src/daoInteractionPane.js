@@ -15,6 +15,8 @@ import Button from '@mui/material/Button';
 
 function DaoInteractionPane(props) {
 
+  const[waitingForReceipt,setWaitingForReceipt] = useState(false);
+
   const [amountToBeWithdrawn, setAmountToBeWithdrawn] = useState(0);
 
   //CURRENT DAO info
@@ -49,7 +51,6 @@ const MINUTE_MS = 60000;
 useEffect(() => {
   const interval = setInterval(() => {
     getAndSetData();
-    setLastTransactionReceipt({});
   }, MINUTE_MS);
 
   return () => clearInterval(interval); // This represents the unmount function, in which you need to clear your interval to prevent memory leaks.
@@ -61,9 +62,15 @@ useEffect(() => {
 // }, [props.molochMessenger.lastTransactionReceipt])
 
 useEffect(() => {
+  if (props.lastTXReturn.transactionHash !== undefined) {
+    //the return data on last transaction signals verified tx
+    //also is not empty object as it is initialized as
   getAndSetData();
   console.log('receipted tx recipt');
-}, [props.receipts])
+} else if (props.lastTXReturn.code!== undefined) { //return data is an error which has two properties - code and name. unsafe to rely on code
+  alert('there was an issue processing this transaction');
+}
+}, [props.lastTXReturn])
 
 
 
