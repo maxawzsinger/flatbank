@@ -61,6 +61,8 @@ useEffect(() => {
 //   console.log('receipted tx hash', lastTransactionReceipt);
 // }, [props.molochMessenger.lastTransactionReceipt])
 
+
+//CATCH RETURNED DATA FROM TRANSACTION REQUESTS TO UPDATE STATE CONDITIONALLY
 useEffect(() => {
   if (props.lastTXReturn.transactionHash !== undefined) {
     //the return data on last transaction signals verified tx
@@ -68,7 +70,7 @@ useEffect(() => {
   getAndSetData();
   console.log('receipted tx recipt');
 } else if (props.lastTXReturn.code!== undefined) { //return data is an error which has two properties - code and name. unsafe to rely on code
-  alert('there was an issue processing this transaction');
+  alert(`there was an issue: ${props.lastTXReturn.message}`);
 }
 }, [props.lastTXReturn])
 
@@ -125,14 +127,25 @@ function makeProposal(proposal) {
        my : 2
      }}>
      <Typography
-     variant="body1"
+     variant="body2"
      gutterBottom
      component="div"
      sx = {{mx:2,mt:2}}>
-     About treasury:
+     Total members: {currentDaoData.memberCount}.
+     Native token: xDAI.
+     Amount owned by treasury: {currentDaoData.totalBalance}.
+     Your voting power: {
+       (currentDaoData.memberInformation[props.account].sharesInt/currentDaoData.totalShares)*100
+     }%.
+     Your total ownership of treasury : {
+       ((currentDaoData.memberInformation[props.account].sharesInt +
+       currentDaoData.memberInformation[props.account].lootInt) /
+       (currentDaoData.totalShares + currentDaoData.totalLoot))*100
+     }%.
     </Typography>
 
      </Box>
+     {currentDaoData.proposalData.length>0 &&
      <Box sx = {{
        border : '2px solid',
        borderColor : '#2196f3',
@@ -151,6 +164,7 @@ function makeProposal(proposal) {
          )}
 
      </Box>
+   }
 
      <Button
          onClick={() => {

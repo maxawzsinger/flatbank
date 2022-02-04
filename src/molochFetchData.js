@@ -13,22 +13,27 @@ async function getData(daoContract) {
 
   const originalSummoningTime = await daoContract.methods.originalSummoningTime().call();
   data.originalSummoningTime = originalSummoningTime;
-
+  //build array of member objects holding information about each member of the DAO
+  data.guildBalance = await daoContract.methods.getUserTokenBalance(contractConfigs.guildAddress, contractConfigs.tokenAddress).call();
+  data.escrowBalance = await daoContract.methods.getUserTokenBalance(contractConfigs.escrowAddress, contractConfigs.tokenAddress).call();
+  data.totalBalance = await daoContract.methods.getUserTokenBalance(contractConfigs.totalAddress, contractConfigs.tokenAddress).call();
+  console.log('**********LOGGING MEMBERS');
 
   //MEMBERS
   //get information about all members of the DAO
   const memberCount = await daoContract.methods.getMemberCount().call(); //number of DAO members
+  data.memberCount = memberCount;
 
-  var memberDataArray = []; //to hold information about DAO members
+  var memberDataMap = {}; //to hold information about DAO members
 
-  //build array of member objects holding information about each member of the DAO
-  // console.log('guild token balance: ', await daoContract.methods.getUserTokenBalance('0x8626f6940e2eb28930efb4cef49b2d1f2c9c1199', contractConfigs.tokenAddress).call());
-  // console.log('escrow token balance: ', await daoContract.methods.getUserTokenBalance('0xdd2fd4581271e230360230f9337d5c0430bf44c0', contractConfigs.tokenAddress).call());
-  // console.log('total token balance: ', await daoContract.methods.getUserTokenBalance('0xbda5747bfd65f08deb54cb465eb87d40e51b197e', contractConfigs.tokenAddress).call());
-  console.log('**********LOGGING MEMBERS');
+
+
+  var shareCount = 0;
+  var lootCount = 0;
   for (let i=0;i<memberCount;i++) {
     // console.log('LOGGING MEMBER ',i);
     const memberAddress = await daoContract.methods.memberList(i).call(); //get member address
+    console.log('memberAddress ', memberAddress);
     // console.log('member token balance: ', await daoContract.methods.getUserTokenBalance(memberAddress, contractConfigs.tokenAddress).call());
     const memberData = await daoContract.methods.members(memberAddress).call(); //get Member object from the DAO.
     //call various contract helper functions to add to the Member object which already contains numerous fields
@@ -47,7 +52,14 @@ async function getData(daoContract) {
       memberData.proposedToKick = false;
     }
     memberData.userTokenBalance = await daoContract.methods.getUserTokenBalance(memberAddress, contractConfigs.tokenAddress).call();
-    memberDataArray.push(memberData); //add to the above array
+
+    memberData.sharesInt = parseInt(memberData.shares);
+    memberData.lootInt = parseInt(memberData.loot);
+    console.log(memberData.sharesInt);
+    shareCount = shareCount +  memberData.sharesInt;
+    console.log('sharecount',shareCount);
+    lootCount += memberData.lootInt;
+    memberDataMap[memberAddress] = memberData; //add to the above array
     // console.log('member highest index yes vote: ', memberData.highestIndexYesVote);
     // console.log('member jailed: ', memberData.jailed);
     // console.log('member shares: ', memberData.shares);
@@ -64,8 +76,13 @@ async function getData(daoContract) {
 
   }
 
-  data.memberInformation = memberDataArray;
+  data.memberInformation = memberDataMap;
+  console.log('member data: ', memberDataMap);
 
+  data.totalShares = shareCount;
+  data.totalLoot = lootCount;
+  console.log(shareCount);
+  console.log(lootCount);
   console.log('**********LOGGING PROPOSALS');
 
   //PROPOSALS
@@ -102,12 +119,19 @@ async function getData(daoContract) {
       if ((currentPeriod == proposalData.startingPeriod) && flags[0] == true) {
         proposalData.status = 'In voting stage';
       } else if (currentPeriod - 7 == proposalData.startingPeriod){
-        proposalData.status = 'In grace stage';
+        proposalData.status = 'Proposal is now in grace stage';
       } else if (currentPeriod < proposalData.startingPeriod) {
         proposalData.status = 'Pre-voting stage';
+      } else if (currentPeriod >= (proposalData.startingPeriod + 14)) {
+        proposalData.status = 'Ready to process';
+      } else if (flags[1] == true && flags[2] == true) {
+        proposalData.status = 'Passed';
+      } else if (flags[1] == true && flags[2] == false) {
+        proposalData.status = 'Failed';
       } else {
         proposalData.status = 'Not yet scheduled';
       }
+
       // console.log('prop status', proposalData.status);
       proposalDataArray.push(proposalData);
       // console.log('proposal: ', proposalData);

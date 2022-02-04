@@ -17,7 +17,6 @@ function MaterialProposal(props) { //pass in summonerContract and web3js obj and
   const [yesVotes, setYesVotes] = useState(0); //this should update immediately to be exciting
   const [noVotes, setNoVotes] = useState(0); //likewise
   const [cancellationStatus,setCancellationStatus] = useState('');
-  const [approvalStatus, setApprovalStatus] = useState('');
 
   useEffect(() => {
 
@@ -30,60 +29,6 @@ function MaterialProposal(props) { //pass in summonerContract and web3js obj and
  const date = new Date((props.originalSummoningTime + (props.proposalObj.currentPeriod * 17280))*1000)
 
  let proposalDate = date.toLocaleString();
-
-// let actionButton;
-//
-// let proposalStatus;
-
-// if ((props.proposalObj.currentPeriod == props.proposalObj.startingPeriod)&&props.proposalObj.flags[0]==true) { //flags[0] ==true means it has been sponsored
-//   proposalStatus = 'In voting stage';
-//   actionButton =
-//   <CardActions>
-//         <Button size="small" onClick={event => {
-//           event.preventDefault();
-//           props.molochMessenger.voteOnProposal(props.proposalObj.propId,1);
-//           setYesVotes(yesVotes+1)}}
-//           >Vote for</Button>
-//         <Button size="small" onClick={event => {
-//           event.preventDefault();
-//           props.molochMessenger.voteOnProposal(props.proposalObj.propId,2);
-//           setNoVotes(noVotes+1)}}
-//           >Vote against</Button>
-//   </CardActions>;
-//   } else if (props.proposalObj.currentPeriod - 7 == props.proposalObj.startingPeriod) {
-//     proposalStatus = "In grace stage";
-//   } else if (props.proposalObj.currentPeriod < props.proposalObj.startingPeriod) {
-//       if (props.account == props.proposalObj.proposer) {
-//           proposalStatus = "Pre-voting stage";
-//           actionButton =
-//           <CardActions>
-//             <Button size="small" onClick={event => {
-//               event.preventDefault();
-//               props.molochMessenger.cancelProposal(props.proposalObj.propId);
-//               setCancellationStatus('cancelled');
-//               console.log("cancelled proposal");}}
-//               >Cancel</Button>
-//           </CardActions>
-//             //cancel if prop.account = prop.proposer
-//       } else {
-//           proposalStatus = "Pre-voting stage";
-//       }
-//
-//   } else { //proposal starting period won't exist because proposal hasn't been yet sponsored
-//
-//           proposalStatus = "Not yet scheduled";
-//           actionButton =
-//           <CardActions>
-//             <Button size="small" onClick={event => {
-//               event.preventDefault();
-//               props.molochMessenger.approveProposal(props.proposalObj.propId);
-//               setApprovalStatus('This proposal has been approved');
-//               console.log("scheduled for vote");
-//             }}
-//             >Schedule proposal</Button>
-//           </CardActions>;
-// }
-
 
 
   return (
@@ -130,12 +75,21 @@ function MaterialProposal(props) { //pass in summonerContract and web3js obj and
       <Button size="small" onClick={event => {
         event.preventDefault();
         props.molochMessenger.approveProposal(props.proposalObj.propId);
-        setApprovalStatus('This proposal has been approved');
         console.log("scheduled for vote");
       }}
       >Schedule proposal</Button>
     </CardActions>
   }
+  {props.proposalObj.status === 'Ready to process' &&
+   <CardActions>
+    <Button size="small" onClick={event => {
+      event.preventDefault();
+      props.molochMessenger.processProposal(props.proposalObj.propIndex);
+      console.log("processed");
+    }}
+    >Process proposal</Button>
+  </CardActions>
+}
     </Card>
   );
 }

@@ -107,6 +107,19 @@ export function MolochMessenger(summon, token, dao, account, updateTXReturn) {
     details
   ) {
 
+    const shares = parseInt(sharesRequested);
+    if (!shares) { //shares requested is the empty string (user has not put a value in) so parseInt return NaN
+      shares = 0;
+    };
+    const loot = parseInt(lootRequested);
+    if (!loot) {
+      loot = 0;
+    };
+    const payment = parseInt(paymentRequested);
+    if (!payment) {
+      payment = 0;
+    };
+
     dao.methods.submitProposal(
       applicant,
       parseInt(sharesRequested),
@@ -191,14 +204,36 @@ export function MolochMessenger(summon, token, dao, account, updateTXReturn) {
 
   }
 
+  this.processProposal = function(proposalIndex) {
+    dao.methods.processProposal(proposalIndex
+    ).send(
+      {from: account}
+    ).on('transactionHash', function(hash){
+        console.log(hash);
+    })
+    .on('receipt', function(receipt){
+        console.log(receipt);
+        updateTXReturn(receipt);
+
+    })
+    .on('confirmation', function(confirmationNumber, receipt){
+        console.log(confirmationNumber);
+    })
+    .on('error', function(error, receipt) {
+        console.log(error);
+        updateTXReturn(error);
+
+    })
+  };
+
 
 
   this.summon = function(addresses,shares) { //arrays of founding members are their shares. array lengths must be equal
     summon.methods.summonMoloch(
       addresses,
       contractConfigs.tokenAddress, //approved tokens for use in the dao contract
-      17280,  //period duration (inseconds)
-      35, //number of periods in voting phase
+      17280,  //period duration (4.8hr inseconds)
+      35, //number of periods in voting phase (ie, 7 days)
       35,  //^ but in grace phase
       0, //proposal deposit
       3, //dilution bound refer to molochdao whitepaper

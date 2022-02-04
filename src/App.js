@@ -222,7 +222,13 @@ if(window.ethereum!==undefined) {
     </Box>
     {screenType==='Treasury creation'
     ? <DaoSummonPane molochMessenger = {molochMessenger}/>
-    : <DaoInteractionPane molochMessenger = {molochMessenger} changeDao = {changeDao} userDaos = {userDaos} lastTXReturn={lastTXReturn}/>
+    : <DaoInteractionPane
+    molochMessenger = {molochMessenger}
+    changeDao = {changeDao}
+    userDaos = {userDaos}
+    lastTXReturn={lastTXReturn}
+    account={account}
+    />
   }
 
   </div>

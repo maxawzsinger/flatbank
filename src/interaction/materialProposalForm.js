@@ -35,7 +35,7 @@ function ProposalForm(props) {
         payment,
         details
       );
-      console.log('receipt in comp: ',receipt);
+      console.log('receipt in comp:');
     } else {
       alert('payment amount is 0');
     }
