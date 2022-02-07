@@ -8,9 +8,7 @@ import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
 
 //functionality
-import {utilities} from '../utilities';
-
-
+import {utilities} from '../../utilities/utilities';
 
 
 function ProposalForm(props) {

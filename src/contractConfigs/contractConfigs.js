@@ -1,6 +1,6 @@
-import {tokenABI} from "./contractABIs/tokenABI";
-import {molochABI} from "./contractABIs/molochABI";
-import {summonerABI} from "./contractABIs/summonerABI";
+import {tokenABI} from "./tokenABI";
+import {molochABI} from "./molochABI";
+import {summonerABI} from "./summonerABI";
 
 const contractConfigs = {
 

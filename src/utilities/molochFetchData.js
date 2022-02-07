@@ -1,4 +1,4 @@
-import contractConfigs from './contractConfigs';
+import contractConfigs from '../contractConfigs/contractConfigs';
 
 async function getData(daoContract) {
 

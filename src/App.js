@@ -1,19 +1,18 @@
-import './App.css'; //from create react app, can probs delete
 import {useState, useEffect} from 'react';
 
 //main screens
-import DaoSummonPane from './daoSummonPane';
-import DaoInteractionPane from './daoInteractionPane';
+import TreasuryCreationScreen from './screens/TreasuryCreationScreen';
+import TreasuryInteractionScreen from './screens/TreasuryInteractionScreen';
 
 //building transactions for MetaMask
-import {MolochMessenger} from './molochMessenger';
-import contractConfigs from './contractConfigs.js';
+import {MolochMessenger} from './utilities/molochMessenger';
+import contractConfigs from './contractConfigs/contractConfigs.js';
 
 //styling components
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
-import {utilities} from './utilities';
+import {utilities} from './utilities/utilities';
 
 
 
@@ -183,7 +182,12 @@ if(window.ethereum!==undefined) {
     {screenType} - interacting as {utilities.shortenAddress(account)}
   </Typography>
      </Box>
-<DaoSummonPane molochMessenger = {molochMessenger}/>
+<TreasuryCreationScreen
+  molochMessenger = {molochMessenger}
+  changeDao={changeDao}
+  account={account}
+  lastTXReturn={lastTXReturn}
+  />
 
    </div>
  )
@@ -221,8 +225,14 @@ if(window.ethereum!==undefined) {
  </Button>
     </Box>
     {screenType==='Treasury creation'
-    ? <DaoSummonPane molochMessenger = {molochMessenger}/>
-    : <DaoInteractionPane
+    ? <TreasuryCreationScreen
+      molochMessenger = {molochMessenger}
+      changeDao={changeDao}
+      account={account}
+      lastTXReturn={lastTXReturn}
+
+      />
+    : <TreasuryInteractionScreen
     molochMessenger = {molochMessenger}
     changeDao = {changeDao}
     userDaos = {userDaos}

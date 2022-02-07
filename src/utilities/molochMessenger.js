@@ -1,4 +1,4 @@
-import contractConfigs from './contractConfigs.js';
+import contractConfigs from '../contractConfigs/contractConfigs.js';
 import getData from './molochFetchData.js';
 
 

@@ -1,10 +1,10 @@
-import {useState, useEffect} from 'react';
+import {useState} from 'react';
 
 //custom components
-import FounderList from './creation/FounderList';
+import FounderList from '../components/creation/FounderList';
+import RequestToJoinForm from '../components/creation/RequestToJoinForm';
 
 //functionality
-import {utilities} from './utilities';
 
 //mui components
 import Typography from '@mui/material/Typography';
@@ -12,13 +12,14 @@ import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 
-function DaoSummonPane(props) { //pass in summonerContract and web3js obj and accout addr to props
+function TreasuryCreationScreen(props) { //pass in summonerContract and web3js obj and accout addr to props
 
   const [addresses,setAddresses] = useState([]); //for molochmessenger summon method
   const [shares,setShares] = useState([]);//for moloch messenger summon method
   const [displayedAddressesAndShares, setDisplayedAddressesAndShares] = useState([]); //for passing to founderlist component
   const [enteredSummonerAddress, setEnteredSummonerAddress] = useState(''); //for display in texfield
   const [enteredSummonerShare, setEnteredSummonerShare] = useState(''); //for display in textfield
+  const [joinView, setJoinView] = useState(false);
 
 
   function handleAddSummoner(){
@@ -42,7 +43,7 @@ function DaoSummonPane(props) { //pass in summonerContract and web3js obj and ac
 
   return (
 
-  <div className="DaoSummonPane">
+  <div className="TreasuryCreationScreen">
     <FounderList data={displayedAddressesAndShares}/>
 
 
@@ -110,9 +111,24 @@ function DaoSummonPane(props) { //pass in summonerContract and web3js obj and ac
       >Summon dao
       </Button>
 
+      <Button
+          onClick={() => {
+            setJoinView(!joinView);
+          }}>
+          {joinView? 'Join treasury △' : 'Join treasury ▽'}
+      </Button>
+      {joinView && <RequestToJoinForm
+        account = {props.account}
+        molochMessenger = {props.molochMessenger}
+        changeDao={props.changeDao}
+        lastTXReturn={props.lastTXReturn}
+
+        />
+      }
+
 
   </div>
   );
   }
 
-export default DaoSummonPane;
+export default TreasuryCreationScreen;

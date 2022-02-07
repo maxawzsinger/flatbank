@@ -6,11 +6,11 @@ import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-import {utilities} from '../utilities';
+import {utilities} from '../../utilities/utilities';
 
 
 
-function MaterialProposal(props) { //pass in summonerContract and web3js obj and accout addr to props
+function ProposalItem(props) { //pass in summonerContract and web3js obj and accout addr to props
 
 
   //most of these are for updating state instantly for UX
@@ -94,4 +94,4 @@ function MaterialProposal(props) { //pass in summonerContract and web3js obj and
   );
 }
 
-export default MaterialProposal;
+export default ProposalItem;

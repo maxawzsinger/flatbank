@@ -2,20 +2,19 @@ import {useState, useEffect} from 'react';
 import * as React from 'react';
 
 //functionality
-import {utilities} from './utilities';
+import {utilities} from '../utilities/utilities';
 
 //custom components
-import ProposalForm from './interaction/materialProposalForm';
-import MaterialProposal from './interaction/materialProposal';
+import ProposalForm from '../components/interaction/ProposalForm';
+import ProposalItem from '../components/interaction/ProposalItem';
 
 //mui components
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 
-function DaoInteractionPane(props) {
+function TreasuryInteractionScreen(props) {
 
-  const[waitingForReceipt,setWaitingForReceipt] = useState(false);
 
   const [amountToBeWithdrawn, setAmountToBeWithdrawn] = useState(0);
 
@@ -24,7 +23,6 @@ function DaoInteractionPane(props) {
   const [currentDaoData, setCurrentDaoData] = useState('');
   const [proposalView, setProposalView] = useState(false);
 
-  const [lastTransactionReceipt, setLastTransactionReceipt] = useState({});
   //SUBMIT PROPOSAL FORM state
 
 async function getAndSetData() { //fetches data about the DAO
@@ -76,19 +74,13 @@ useEffect(() => {
 
 
 
-function makeProposal(proposal) {
-  return  <MaterialProposal
-  proposalObj = {proposal}
-  molochMessenger = {props.molochMessenger}
-  account = {props.account}
-  summoningTime = {currentDaoData.originalSummoningTime}/>
-};
+
 
 
 
 //DISPLAY DAOs OF WHICH THE USER IS A MEMBER AND IF THERE IS A DAO SELECTED, RENDER INFO ABOUT THE DAO
     return (
-      <div className="DaoInteractionPane">
+      <div className="TreasuryInteractionScreen">
       <Typography
       variant="h6"
       gutterBottom
@@ -156,7 +148,7 @@ function makeProposal(proposal) {
      }}>
 
      {currentDaoData.proposalData.map(proposal =>
-           <MaterialProposal
+           <ProposalItem
            proposalObj = {proposal}
            molochMessenger = {props.molochMessenger}
            account = {props.account}
@@ -221,4 +213,4 @@ function makeProposal(proposal) {
 
 }
 
-export default DaoInteractionPane;
+export default TreasuryInteractionScreen;
