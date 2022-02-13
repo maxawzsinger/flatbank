@@ -1,3 +1,5 @@
+//these functions make nice looking strings for better display
+
 export const utilities = {
   produceProposalDescription : function(proposalObject) {
       if (proposalObject.flags[5] == true) { //indicates proposal is guildkick

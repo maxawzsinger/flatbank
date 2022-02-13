@@ -11,7 +11,7 @@ import Typography from '@mui/material/Typography';
 
 
 
-
+//ABOUT - for use in the treausry creation screen. displays proposed treasury founders nicely.
 
 
 

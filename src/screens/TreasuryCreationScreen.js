@@ -12,6 +12,10 @@ import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 
+//ABOUT
+//this component contains forms to either create a treasury or join a treasury, if the user has the treasury's on-chain hex available.
+//
+
 function TreasuryCreationScreen(props) { //pass in summonerContract and web3js obj and accout addr to props
 
   const [addresses,setAddresses] = useState([]); //for molochmessenger summon method
@@ -107,7 +111,7 @@ function TreasuryCreationScreen(props) { //pass in summonerContract and web3js o
         my : 2,
       }}
       variant = "outlined"
-      onClick={() => props.molochMessenger.summon(addresses,parseInt(shares))} //parse string to integer
+      onClick={() => props.molochMessenger.summon(addresses,shares)} //parse string to integer
       >Summon dao
       </Button>
 
@@ -115,7 +119,7 @@ function TreasuryCreationScreen(props) { //pass in summonerContract and web3js o
           onClick={() => {
             setJoinView(!joinView);
           }}>
-          {joinView? 'Join treasury △' : 'Join treasury ▽'}
+          {joinView? 'Request to join a treasury △' : 'Request to join a treasury ▽'}
       </Button>
       {joinView && <RequestToJoinForm
         account = {props.account}

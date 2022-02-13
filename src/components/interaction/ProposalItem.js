@@ -8,10 +8,11 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import {utilities} from '../../utilities/utilities';
 
-
+//ABOUT: displays information about a proposal.
 
 function ProposalItem(props) { //pass in summonerContract and web3js obj and accout addr to props
 
+  console.log(props.originalSummoningTime);
 
   //most of these are for updating state instantly for UX
   const [yesVotes, setYesVotes] = useState(0); //this should update immediately to be exciting
@@ -26,7 +27,16 @@ function ProposalItem(props) { //pass in summonerContract and web3js obj and acc
 
 //render dfferent cards depending on the status of the proposal
 
- const date = new Date((props.originalSummoningTime + (props.proposalObj.currentPeriod * 17280))*1000)
+console.log((props.originalSummoningTime + (props.proposalObj.currentPeriod * 17280))*1000);
+console.log('og summon time: ', props.originalSummoningTime);
+console.log(typeof props.originalSummoningTime);
+console.log('og summon time * 17280: ',props.proposalObj.startingPeriod*17280);
+console.log(typeof props.proposalObj.startingPeriod);
+console.log(typeof props.proposalObj.startingPeriod * 17280);
+console.log((parseInt(props.proposalObj.startingPeriod)*17280) + parseInt(props.originalSummoningTime));
+
+
+ const date = new Date((parseInt(props.originalSummoningTime) + (parseInt(props.proposalObj.currentPeriod * 17280)))*1000)
 
  let proposalDate = date.toLocaleString();
 
@@ -35,7 +45,8 @@ function ProposalItem(props) { //pass in summonerContract and web3js obj and acc
     <Card sx={{ minWidth: 275 }}>
       <CardContent>
         <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-          {props.proposalObj.status}
+          Status: {props.proposalObj.status}.
+          {props.proposalObj.timeline}
         </Typography>
         <Typography variant="h5" component="div">
           Proposal
@@ -84,6 +95,7 @@ function ProposalItem(props) { //pass in summonerContract and web3js obj and acc
    <CardActions>
     <Button size="small" onClick={event => {
       event.preventDefault();
+      console.log(props.proposalObj.propIndex);
       props.molochMessenger.processProposal(props.proposalObj.propIndex);
       console.log("processed");
     }}

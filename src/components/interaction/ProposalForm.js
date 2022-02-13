@@ -10,6 +10,10 @@ import TextField from '@mui/material/TextField';
 //functionality
 import {utilities} from '../../utilities/utilities';
 
+//ABOUT:
+//for use in TreasuryInteractionScreen. Create either a proposal to make a payment to a particular address
+//or kick a member from the treasury.
+
 
 function ProposalForm(props) {
 

@@ -19,16 +19,15 @@ import {utilities} from './utilities/utilities';
 
 function App() {
 
-  //functions
+  //used to build molochMessengers for each treasury the user interacts with
+  //molochMessenger and lastTXReturn are passed down as props to components so they can interact with on-chain contracts/react to transaction receipts
   const [web3js, setWeb3js] = useState({}); //hold web3 obj
-  const [summonerContract, setSummonerContract] = useState({}); //hold summoning contract
+  const [summonerContract, setSummonerContract] = useState({});
   const [tokenContract, setTokenContract] = useState({});
   const [molochMessenger, setMolochMessenger] = useState({});
   const [lastTXReturn,setLastTXReturn] = useState({})
 
-  //important notes - web3js signals a verified transaction by returning a tx receipt. molochmessenger takes in
-  //the setLastTXReturn() as a parameter and uses this to pass txreceipt data to App.js which then passes this to dao INTERACTION
-  //pane as props. inside, daoInteractionPane uses useEffect to trigger a data refresh
+
 
   //display
   const [screenType, setScreenType] = useState("Treasury creation"); //controls screen screenType (interact or creation)
@@ -42,7 +41,9 @@ function App() {
 
 
 
-
+//listens for the user changing accounts / chains in MetaMask
+//if the user has changed accounts, sign in with new accounts
+//if chain has changed, alert the user. this application is designed to interact with one chain only.
   useEffect(() => {
 
     if (window.ethereum !== undefined) {
@@ -59,32 +60,32 @@ function App() {
     }
  }, [])
 
+
+//signIn()
+//ABOUT: when called, the function pulls user data from metamask
+// then finds all treasuries the user is in
+// then builds a molochMessenger for the first treasury in that list
+
  async function signIn() {
 
-   //INSTANTIATE AND STORE WEB3JS OBJECT IN STATE, checking if user has installed MetaMask and is signed in
 if(window.ethereum!==undefined) {
+
   console.log('attempting to connect');
-  // await window.ethereum.request({ method: 'eth_requestAccounts' });
   const web3Obj = new window.Web3(window.ethereum);
   setWeb3js(web3Obj);
+
   const accounts = await web3Obj.eth.requestAccounts();
   console.log(accounts);
   if (accounts!==undefined) {
-  setAccount(accounts[0]);       //set primary account
+  setAccount(accounts[0]);
 
-
-  //USE WEB3JS TO BUILD CONTRACT OBJECTS, STORING IN STATE
   let summonerContract = new web3Obj.eth.Contract(contractConfigs.summonerABI, contractConfigs.summonerAddress);
   setSummonerContract(summonerContract);
 
-
   let tokenContract = new web3Obj.eth.Contract(contractConfigs.tokenABI, contractConfigs.tokenAddress);
   setTokenContract(tokenContract);
+
   const totalNumberOfDaos = await summonerContract.methods.numberOfDaos().call();
-
-
-  //USE SUMMONER CONTRACT TO CHECK IF USER IS A MEMBER OF ANY DAOS. IF THEY ARE, OPTIMISTICALLY BUILD A NEW MolochMessenger for the first DAO they joined.
-  //MolochMessengers are rebuilt for each dao as the user switches between them. They build transaction requests for MetaMask pre-addressed to the DAO instance.
   let usersDaos = [];
 
   for (let i = 0; i<totalNumberOfDaos; i++) {
@@ -99,8 +100,6 @@ if(window.ethereum!==undefined) {
   }
   setUserDaos(usersDaos);
   console.log(usersDaos);
-
-
   if (usersDaos.length > 0) {
     const daoInstance = new web3Obj.eth.Contract(contractConfigs.molochABI, usersDaos[0]);
 
@@ -117,21 +116,24 @@ if(window.ethereum!==undefined) {
 };
 
 
-// FUNCTION TO BUILD A NEW molochMessenger IF THE USER SWITCHES DAOs THEY ARE INTERACTING WITH
+// changeDao() ABOUT:
+// this function is passed down to components to allow them to trigger the creation of a new molochMessenger for a new selected treasury
  function changeDao(daoAddress) {
    const daoInstance = new web3js.eth.Contract(contractConfigs.molochABI, daoAddress);
+   console.log(daoInstance);
    const molochMessenger = new MolochMessenger(summonerContract, tokenContract, daoInstance, account, setLastTXReturn);
+   console.log(molochMessenger);
    setMolochMessenger(molochMessenger);
    console.log(daoInstance);
  }
 
 
-//RETURNS EITHER INTERACTION OR CREATION COMPONENT DEPENDING ON STATE OF "screenType"
+//display ABOUT:
 
 //THREE ROUTES -
 //user hasn't installed metamask or hasn't signed in. display only sign in button
 //user has signed in but is not in any daos. should not be able to access interaction pane.
-//user has signed in and is in a dao. should be able to switch between creation and interaction
+//user has signed in and is in a dao. should be able to switch between creation and interaction, depending on state of "screenType"
 
   if (account.length===0) { //user either hasn't installed
     return (

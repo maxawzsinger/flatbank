@@ -7,12 +7,14 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
 
-//functionality
+//About:
+//uses molochMessenger to build a proposal for an existing treasury to join.
 
 
 
 
 function RequestToJoinForm(props) {
+
 
   const [shares, setShares] = useState('');
   const [loot, setLoot] = useState('');
@@ -21,6 +23,10 @@ function RequestToJoinForm(props) {
   const [daoAddress, setDaoAddress] = useState('');
 
   function handleJoinSubmit() {
+
+
+
+
     if ((shares + loot + payment) > 0) {
       props.changeDao(daoAddress);
       props.molochMessenger.submitPaymentProposal(

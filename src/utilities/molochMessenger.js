@@ -2,12 +2,15 @@ import contractConfigs from '../contractConfigs/contractConfigs.js';
 import getData from './molochFetchData.js';
 
 
-//write functions up here
-
-// initialize object const = {}
+//MolochMessenger ABOUT:
+//this object packages all functions that interact with both the treasury creation smart contract and
+//the treasury smart contract itself. some of these functions contain a lot of repeated code and also parameters that for the purposes of this particular website are hardcoded.
+// these functions are themselves attached to web3js contract objects which abstract over the raw transaction request syntax.
+//below, summon refers to the treasury creation smart contract web3js object, token to the token contract, dao to the treasury contract,
+//account is the user's current wallet hex addresses
+//and updateTXReturn is a setState method updating any response from MetaMask on transaction request, to be passed down to child components for display
 
 export function MolochMessenger(summon, token, dao, account, updateTXReturn) {
-  //summoner is summonMoloch web3js contract, dao is daoInstance contract, token is token contract
 
   this.voteOnProposal = function(proposalIndex,voteType) {
     dao.methods.submitVote(proposalIndex,voteType).send(
@@ -107,15 +110,16 @@ export function MolochMessenger(summon, token, dao, account, updateTXReturn) {
     details
   ) {
 
-    const shares = parseInt(sharesRequested);
-    if (!shares) { //shares requested is the empty string (user has not put a value in) so parseInt return NaN
+    let shares = parseInt(sharesRequested);
+    //shares requested is the empty string (user has not put a value in) so parseInt return NaN. same with below checks -- if(!var)
+    if (!shares) {
       shares = 0;
     };
-    const loot = parseInt(lootRequested);
+    let loot = parseInt(lootRequested);
     if (!loot) {
       loot = 0;
     };
-    const payment = parseInt(paymentRequested);
+    let payment = parseInt(paymentRequested);
     if (!payment) {
       payment = 0;
     };
@@ -205,6 +209,7 @@ export function MolochMessenger(summon, token, dao, account, updateTXReturn) {
   }
 
   this.processProposal = function(proposalIndex) {
+    console.log('in pp, ',proposalIndex, typeof proposalIndex);
     dao.methods.processProposal(proposalIndex
     ).send(
       {from: account}
@@ -229,6 +234,10 @@ export function MolochMessenger(summon, token, dao, account, updateTXReturn) {
 
 
   this.summon = function(addresses,shares) { //arrays of founding members are their shares. array lengths must be equal
+    let intShares = []
+    for (let i=0;i<shares.length;i++) {
+      intShares.push(parseInt(shares[i]));
+    }
     summon.methods.summonMoloch(
       addresses,
       contractConfigs.tokenAddress, //approved tokens for use in the dao contract
@@ -261,10 +270,13 @@ export function MolochMessenger(summon, token, dao, account, updateTXReturn) {
 
 
 ///TEMP FUNCTIONS FOR DEV
-  this.fastForward = async function() {
-    const summoningTime = await dao.methods.summoningTime().call();
+  this.fastForward = async function(desiredPeriod) {
+    //change summoning time to make the current time the desired periodDuration
+    const currentTime = Math.round(Date.now() / 1000) //seconds since epoch
+    const newSummoningTime = (-17280 * parseInt(desiredPeriod)) + currentTime;
 
-    dao.methods.changeSummoningTime(summoningTime - 604800).send(
+
+    dao.methods.changeSummoningTime(newSummoningTime).send(
       {from: account}
     ).on('transactionHash', function(hash){
         console.log(hash);
@@ -306,26 +318,3 @@ export function MolochMessenger(summon, token, dao, account, updateTXReturn) {
   }
 
 };
-
-
-//pass in summonercontract object and dao instance object.
-
-//add a function in app.js that takes in a dao address and creates a new dao instance to pass to MolochMessenger
-//pass this as props to the interaction pane
-
-
-// var usersDaos = [];
-// for (let i = 0; i<totalNumberOfDaos; i++) {
-//   const daoAddress = await props.summonerContract.methods.addressLUT(i).call();
-//   const daoInstance = new props.web3js.eth.Contract(molochContractABI, daoAddress);
-//   const memberInDao = await daoInstance.methods.checkMemberInDao(account);
-//   if (memberInDao) {
-//     usersDaos.push(daoAddress);
-//   }
-// }
-
-// add this code to app.js and remove from daoInteractionPane
-
-//replace stuff in my components with these functions
-
-//haven't done : fast forward, revert summoning time
