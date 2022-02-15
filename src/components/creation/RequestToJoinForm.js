@@ -21,6 +21,7 @@ function RequestToJoinForm(props) {
   const [payment,setPayment] = useState('');
   const [details, setDetails] = useState('');
   const [daoAddress, setDaoAddress] = useState('');
+  const [tribute,setTribute] = useState('');
 
   function handleJoinSubmit() {
 
@@ -35,6 +36,7 @@ function RequestToJoinForm(props) {
         shares,
         loot,
         payment,
+        tribute, //tribute offered.
         details
       )
     }else {
@@ -135,6 +137,19 @@ function RequestToJoinForm(props) {
               value = {payment}
               onChange = {e => setPayment(e.target.value)}
               />
+              <TextField
+                sx={{
+                  mx : 2,
+                  mt : 2,
+                  alignSelf : 'stretch'
+
+                }}
+                label = 'Money offered:'
+                id="outlined-basic"
+                variant="outlined"
+                value = {tribute}
+                onChange = {e => setTribute(e.target.value)}
+                />
               <TextField
                 sx={{
                   mx : 2,

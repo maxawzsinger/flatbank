@@ -189,6 +189,7 @@ if(window.ethereum!==undefined) {
   changeDao={changeDao}
   account={account}
   lastTXReturn={lastTXReturn}
+  signIn = {signIn}
   />
 
    </div>
@@ -232,6 +233,7 @@ if(window.ethereum!==undefined) {
       changeDao={changeDao}
       account={account}
       lastTXReturn={lastTXReturn}
+      signIn = {signIn}
 
       />
     : <TreasuryInteractionScreen

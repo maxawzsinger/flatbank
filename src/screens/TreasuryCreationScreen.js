@@ -1,4 +1,4 @@
-import {useState} from 'react';
+import {useState, useEffect} from 'react';
 
 //custom components
 import FounderList from '../components/creation/FounderList';
@@ -24,6 +24,17 @@ function TreasuryCreationScreen(props) { //pass in summonerContract and web3js o
   const [enteredSummonerAddress, setEnteredSummonerAddress] = useState(''); //for display in texfield
   const [enteredSummonerShare, setEnteredSummonerShare] = useState(''); //for display in textfield
   const [joinView, setJoinView] = useState(false);
+
+  useEffect(() => {
+    if (props.lastTXReturn.transactionHash !== undefined) {
+      //the return data on last transaction signals verified tx
+      //also is not empty object as it is initialized as
+    props.signIn();
+    console.log('receipted tx recipt');
+  } else if (props.lastTXReturn.code!== undefined) { //return data is an error which has two properties - code and name. unsafe to rely on code
+    alert(`there was an issue: ${props.lastTXReturn.message}`);
+  }
+  }, [props.lastTXReturn])
 
 
   function handleAddSummoner(){

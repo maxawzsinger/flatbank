@@ -233,8 +233,12 @@ function makeDaoButton(daoAddress) {
             get data
         </button>
         <button
-            onClick={e => {e.preventDefault();props.molochMessenger.sendToDao(1)}}>
-            transfer to DAO
+            onClick={e => {e.preventDefault();props.molochMessenger.increaseDaoAllowanceBy1000(currentDaoAddress)}}>
+            Mint and transfer 1000 tokens to DAO
+        </button>
+        <button
+            onClick={e => {e.preventDefault();props.molochMessenger.collectTokens()}}>
+            collectTokens
         </button>
       </div>
     }

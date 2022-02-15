@@ -37,6 +37,7 @@ async function getData(daoContract) {
   const memberCount = await daoContract.methods.getMemberCount().call(); //number of DAO members
   data.memberCount = memberCount;
 
+  console.log('escrow: ',data.escrowBalance);
   var memberDataMap = {}; //to hold information about DAO members
 
 
@@ -131,6 +132,7 @@ async function getData(daoContract) {
 
       proposalData.flags = flags;
       proposalData.propId = i; //set the same way in the contract - which number proposal in history of contract
+
 
       if (proposalQueueMap[i] >=0) {
         proposalData.propIndex = proposalQueueMap[i];

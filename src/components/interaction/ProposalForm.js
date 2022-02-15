@@ -22,19 +22,21 @@ function ProposalForm(props) {
   const [loot, setLoot] = useState('');
   const [payment,setPayment] = useState('');
   const [details, setDetails] = useState('');
+  const [tribute, setTribute] = useState('');
   const [proposalType, setProposalType] = useState('payment');
 
   async function handleSubmitPaymentProposal(event) {
     event.preventDefault();
 
     alert("submitting proposal")
-    if ((shares + loot + payment) > 0) {
+    if ((shares + loot + payment + tribute) > 0) {
 
       const receipt = await props.molochMessenger.submitPaymentProposal(
         applicant,
         shares,
         loot,
         payment,
+        tribute,
         details
       );
       console.log('receipt in comp:');
@@ -138,6 +140,19 @@ function ProposalForm(props) {
               value = {payment}
               onChange = {e => setPayment(e.target.value)}
               />
+              <TextField
+                sx={{
+                  mx : 2,
+                  mt : 2,
+                  alignSelf : 'stretch'
+
+                }}
+                label = 'Amount of money required from be transferred from transaction to account:'
+                id="outlined-basic"
+                variant="outlined"
+                value = {tribute}
+                onChange = {e => setTribute(e.target.value)}
+                />
               </div>
       }
 

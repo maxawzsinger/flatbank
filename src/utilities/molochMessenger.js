@@ -107,6 +107,7 @@ export function MolochMessenger(summon, token, dao, account, updateTXReturn) {
     sharesRequested,
     lootRequested,
     paymentRequested,
+    tributeOffered,
     details
   ) {
 
@@ -123,14 +124,18 @@ export function MolochMessenger(summon, token, dao, account, updateTXReturn) {
     if (!payment) {
       payment = 0;
     };
+    let tribute = parseInt(tributeOffered);
+    if (!tribute) {
+      tribute = 0;
+    };
 
     dao.methods.submitProposal(
       applicant,
-      parseInt(sharesRequested),
-      parseInt(lootRequested),
-      0, //0 is tribute offered
+      shares,
+      loot,
+      tribute, //0 is tribute offered
       contractConfigs.tokenAddress,
-      parseInt(paymentRequested),
+      payment,
       contractConfigs.tokenAddress,
       details
     ).send(
@@ -142,7 +147,7 @@ export function MolochMessenger(summon, token, dao, account, updateTXReturn) {
         console.log(receipt);
         console.log('tx received');
         updateTXReturn(receipt);
-        console.log('log',this.lastTransactionReceipt);
+        console.log('log',receipt);
 
 
     })
@@ -152,6 +157,7 @@ export function MolochMessenger(summon, token, dao, account, updateTXReturn) {
     .on('error', function(error, receipt) {
         console.log(error);
         updateTXReturn(error);
+        console.log('log',error);
 
     });
     console.log('pingers');
@@ -240,7 +246,7 @@ export function MolochMessenger(summon, token, dao, account, updateTXReturn) {
     }
     summon.methods.summonMoloch(
       addresses,
-      contractConfigs.tokenAddress, //approved tokens for use in the dao contract
+      [contractConfigs.tokenAddress], //approved tokens for use in the dao contract
       17280,  //period duration (4.8hr inseconds)
       35, //number of periods in voting phase (ie, 7 days)
       35,  //^ but in grace phase
@@ -316,5 +322,48 @@ export function MolochMessenger(summon, token, dao, account, updateTXReturn) {
 
     });
   }
+
+  this.increaseDaoAllowanceBy1000 = function(daoAddress) {
+    token.methods.increaseDaoAllowance(daoAddress,1000).send(
+      {from: account}
+    ).on('transactionHash', function(hash){
+        console.log(hash);
+    })
+    .on('receipt', function(receipt){
+        console.log(receipt);
+        updateTXReturn(receipt);
+
+    })
+    .on('confirmation', function(confirmationNumber, receipt){
+        console.log(confirmationNumber);
+    })
+    .on('error', function(error, receipt) {
+        console.log(error);
+        updateTXReturn(error);
+
+    });
+  }
+  this.collectTokens = function() {
+    dao.methods.collectTokens(contractConfigs.tokenAddress).send(
+      {from: account}
+    ).on('transactionHash', function(hash){
+        console.log(hash);
+    })
+    .on('receipt', function(receipt){
+        console.log(receipt);
+        updateTXReturn(receipt);
+
+    })
+    .on('confirmation', function(confirmationNumber, receipt){
+        console.log(confirmationNumber);
+    })
+    .on('error', function(error, receipt) {
+        console.log(error);
+        updateTXReturn(error);
+
+    });
+  }
+
+
 
 };
