@@ -11,7 +11,7 @@ To run on a local blockchain:
 - Install MetaMask
 - Install the hardhat development environment.
 - Install node.js
-- Download flatbank and hardhat-flatbank (separate maxawzsinger repository) 
+- Download flatbank and hardhat-flatbank (https://github.com/maxawzsinger/hardhat-flatbank) 
 - Install necessary packages for each project.
 - In directory "hardhat-flatbank", run:
 - npx hardhat node (for starting local blockchain. Note provided addresses and private keys)
