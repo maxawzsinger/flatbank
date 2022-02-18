@@ -1,8 +1,8 @@
-##About project
+# About project
 
 WIP DAO launcher based around the molochDAO DAO template, but without using The Graph to pull data.
 
-##How to run
+# How to run
 
 Due to the contract size limitation (~25KB) this contract in its current iteration cannot be deployed except on a local blockchain with size limit turned off.
 The contract is still in the process of being split.
