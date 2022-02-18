@@ -2,6 +2,16 @@
 
 WIP DAO launcher based around the molochDAO DAO template, but without using The Graph to pull data.
 
+The heart of the app is molochMessenger.js (which imports molochFetchData.js) in utilities.
+
+This packages methods from 3 web3.js contract objects - one for the DAO creation contract (which also holds information about all DAOs created through flatbank, one for the treasury contract itself, and one for the token contract - a token created for development purposes which the DAOs are hardcoded to accept.
+
+These methods are themselves abstractions over transactions requests for MetaMask, which is the current gold standard for in-browser wallets, and handles talking to nodes (via Infura by default) to communicate data to and from the network. 
+
+molochMessenger is passed as props to all children that want to call its methods. When transactions produce receipts, these are passed to App.js via a callback method, stored in state, and passed down to children. 
+
+The UI is divided into a treasury creation section - triggering deployment of new smart contracts defining DAOs- and a DAO interaction section - for users to vote on proposals of existing DAOs of which they have shares in.
+
 # How to run
 
 Due to the contract size limitation (~25KB) this contract in its current iteration cannot be deployed except on a local blockchain with size limit turned off.
