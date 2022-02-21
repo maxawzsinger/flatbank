@@ -253,20 +253,6 @@ export const molochABI = [
       "type": "function"
     },
     {
-      "constant": false,
-      "inputs": [
-        {
-          "name": "newDelegateKey",
-          "type": "address"
-        }
-      ],
-      "name": "updateDelegateKey",
-      "outputs": [],
-      "payable": false,
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
       "constant": true,
       "inputs": [],
       "name": "TOTAL",
@@ -925,25 +911,6 @@ export const molochABI = [
       "type": "function"
     },
     {
-      "constant": true,
-      "inputs": [
-        {
-          "name": "",
-          "type": "address"
-        }
-      ],
-      "name": "proposedToWhitelist",
-      "outputs": [
-        {
-          "name": "",
-          "type": "bool"
-        }
-      ],
-      "payable": false,
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
       "constant": false,
       "inputs": [
         {
@@ -997,29 +964,6 @@ export const molochABI = [
       ],
       "payable": false,
       "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "constant": false,
-      "inputs": [
-        {
-          "name": "tokenToWhitelist",
-          "type": "address"
-        },
-        {
-          "name": "details",
-          "type": "string"
-        }
-      ],
-      "name": "submitWhitelistProposal",
-      "outputs": [
-        {
-          "name": "proposalId",
-          "type": "uint256"
-        }
-      ],
-      "payable": false,
-      "stateMutability": "nonpayable",
       "type": "function"
     },
     {
@@ -1222,31 +1166,14 @@ export const molochABI = [
           "indexed": false,
           "name": "didPass",
           "type": "bool"
-        }
-      ],
-      "name": "ProcessProposal",
-      "type": "event"
-    },
-    {
-      "anonymous": false,
-      "inputs": [
-        {
-          "indexed": true,
-          "name": "proposalIndex",
-          "type": "uint256"
-        },
-        {
-          "indexed": true,
-          "name": "proposalId",
-          "type": "uint256"
         },
         {
           "indexed": false,
-          "name": "didPass",
-          "type": "bool"
+          "name": "failFlag",
+          "type": "uint256"
         }
       ],
-      "name": "ProcessWhitelistProposal",
+      "name": "ProcessProposal",
       "type": "event"
     },
     {
