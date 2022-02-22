@@ -1,70 +1,32 @@
-# Getting Started with Create React App
+# About project
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+WIP DAO launcher based around the molochDAO DAO template, but without using The Graph to pull data.
 
-## Available Scripts
+The heart of the app is molochMessenger.js (which imports molochFetchData.js) in utilities.
 
-In the project directory, you can run:
+This packages methods from 3 web3.js contract objects - one for the DAO creation contract (which also holds information about all DAOs created through flatbank, one for the treasury contract itself, and one for the token contract - a token created for development purposes which the DAOs are hardcoded to accept.
 
-### `npm start`
+These methods are themselves abstractions over transactions requests for MetaMask, which is the current gold standard for in-browser wallets, and handles talking to nodes (via Infura by default) to communicate data to and from the network. 
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+molochMessenger is passed as props to all children that want to call its methods. When transactions produce receipts, these are passed to App.js via a callback method, stored in state, and passed down to children. 
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+The UI is divided into a treasury creation section - triggering deployment of new smart contracts defining DAOs- and a DAO interaction section - for users to vote on proposals of existing DAOs of which they have shares in.
 
-### `npm test`
+# How to run
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Due to the contract size limitation (~25KB) this contract in its current iteration cannot be deployed except on a local blockchain with size limit turned off.
+The contract is still in the process of being split.
 
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+To run on a local blockchain:
+- Install MetaMask
+- Install the hardhat development environment.
+- Install node.js
+- Download flatbank and hardhat-flatbank (https://github.com/maxawzsinger/hardhat-flatbank) 
+- Install necessary packages for each project.
+- In directory "hardhat-flatbank", run:
+- npx hardhat node (for starting local blockchain. Note provided addresses and private keys)
+- npx hardhat run --network localhost scripts/deployMolochDynamic.js (deploys contracts on your local blockchain)
+- Note console logged addresses for deployed contracts, update these if necessary in contractConfigs.js in contractConfigs directory in flatbank project
+- In directory "flatbank", run: 
+- npm start (to start react server)
+- Start interacting. Note MetaMask interactions are buggy on hardhat local blockchain due to sync issues.
