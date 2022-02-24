@@ -1,3 +1,5 @@
+24/02/2022 To connect: Add, and switch to custom network in MetaMask: RPC-URL http://d7af-119-18-2-39.ngrok.io and Chain ID 31337
+
 # About project
 
 WIP DAO launcher based around the molochDAO DAO template, but without using The Graph to pull data.
