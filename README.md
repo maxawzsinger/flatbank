@@ -14,12 +14,8 @@ molochMessenger is passed as props to all children that want to call its methods
 
 The UI is divided into a treasury creation section - triggering deployment of new smart contracts defining DAOs- and a DAO interaction section - for users to vote on proposals of existing DAOs of which they have shares in.
 
-# How to run
+# How to run on a local blockchain:
 
-Due to the contract size limitation (~25KB) this contract in its current iteration cannot be deployed except on a local blockchain with size limit turned off.
-The contract is still in the process of being split.
-
-To run on a local blockchain:
 - Install MetaMask
 - Install the hardhat development environment.
 - Install node.js
