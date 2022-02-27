@@ -1,4 +1,4 @@
-24/02/2022 To connect: Add, and switch to custom network in MetaMask: RPC-URL http://f285-119-18-2-39.ngrok.io and Chain ID 31337
+To connect: Add, and switch to custom network in MetaMask: RPC-URL http://f285-119-18-2-39.ngrok.io and Chain ID 31337
 
 # About project
 
