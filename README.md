@@ -1,4 +1,4 @@
-To connect: Add, and switch to custom network in MetaMask: RPC-URL http://cafb-101-174-217-90.ngrok.io and Chain ID 31337
+To connect: Add, and switch to custom network in MetaMask: RPC-URL http://de00-101-174-217-90.ngrok.io and Chain ID 31337
 
 # About project
 
